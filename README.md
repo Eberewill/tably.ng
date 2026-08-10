@@ -7,6 +7,7 @@ Premium restaurant ordering and operations for dine-in and pickup.
 - `apps/customer-web` — mobile-first menu and ordering PWA
 - `apps/restaurant-web` — restaurant management and operations
 - `apps/restaurant-desktop` — Tauri desktop companion for Windows/macOS
+- `apps/api` — central Go API and PostgreSQL migrations
 - `packages/*` — shared UI, contracts, domain logic, validation, and print layouts
 - `native/*` — Rust crates for printing, offline sync, and device integration
 
@@ -18,6 +19,8 @@ corepack pnpm dev
 ```
 
 Customer web runs on port 3000 and restaurant web on port 3001. Install the Rust toolchain and platform prerequisites before running `pnpm --filter @tably/restaurant-desktop tauri dev`.
+
+Run the API separately with `cd apps/api && go run ./cmd/api`. All clients use this one authoritative backend; the desktop runtime only owns local hardware and offline capabilities.
 
 ## Product boundaries
 
