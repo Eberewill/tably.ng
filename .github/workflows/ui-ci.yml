@@ -1,0 +1,35 @@
+name: UI CI
+
+on:
+  pull_request:
+    paths:
+      - "apps/customer-web/**"
+      - "apps/restaurant-web/**"
+      - "apps/restaurant-desktop/**"
+      - "packages/ui/**"
+      - "scripts/check-design-system.mjs"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/ui-ci.yml"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.8.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm design:check
+      - run: pnpm typecheck
+      - run: pnpm build

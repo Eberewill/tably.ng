@@ -3,10 +3,11 @@
   "private": true,
   "packageManager": "pnpm@11.8.0",
   "scripts": {
-    "dev": "corepack pnpm --parallel --filter './apps/*' dev",
-    "build": "corepack pnpm -r --if-present build",
-    "typecheck": "corepack pnpm -r typecheck",
-    "test": "corepack pnpm -r test",
+    "dev": "pnpm --parallel --filter './apps/*' dev",
+    "build": "pnpm -r --if-present build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm design:check && pnpm -r test",
+    "design:check": "node scripts/check-design-system.mjs",
     "format": "prettier --write ."
   },
   "devDependencies": {

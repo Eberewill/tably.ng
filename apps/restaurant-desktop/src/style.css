@@ -1,0 +1,9 @@
+.desktop-shell { max-width: 1280px; min-height: 100vh; margin: 0 auto; padding: 64px; }
+.desktop-shell header { display: flex; align-items: baseline; justify-content: space-between; gap: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
+.desktop-shell h1 { margin: 64px 0 16px; font-size: 2.25rem; font-weight: 500; letter-spacing: -0.01em; }
+.desktop-shell p { max-width: 600px; color: var(--ink-secondary); font-size: 1.125rem; line-height: 1.6; }
+.desktop-status { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 64px; }
+.desktop-status article { padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.desktop-status span { display: block; color: var(--muted); font-size: 0.875rem; }
+.desktop-status strong { display: block; margin-top: 8px; font-weight: 500; }
+@media (max-width: 720px) { .desktop-shell { padding: 32px 20px; } .desktop-status { grid-template-columns: 1fr; gap: 16px; margin-top: 32px; } }

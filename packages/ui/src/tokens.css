@@ -1,8 +1,57 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-:root { --canvas:#f8f5ef; --surface:#fff; --ink:#171512; --muted:#776f64; --accent:#b95332; --gold:#b8914b; --line:#e8e1d7; --radius:24px; font-family:"Poppins",sans-serif; color:var(--ink); background:var(--canvas); }
-* { box-sizing:border-box; }
-body { margin:0; min-width:320px; min-height:100vh; }
-button,input { font:inherit; }
-.tably-brand { font-size:1.35rem; font-weight:700; letter-spacing:-.06em; }
-.tably-brand span { color:var(--accent); }
-.tably-button { border:0; border-radius:999px; background:var(--ink); color:white; padding:.8rem 1.2rem; font-weight:600; cursor:pointer; }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+:root {
+  --canvas: #f8f5ef;
+  --surface: #fcf9f3;
+  --surface-primary: #fff;
+  --surface-neutral: #f1ece3;
+  --surface-dim: #dcdad4;
+  --surface-container-low: #f6f3ed;
+  --surface-container: #f0eee8;
+  --surface-container-high: #ebe8e2;
+  --ink: #1c1c18;
+  --ink-secondary: #4b463f;
+  --muted: #7c766e;
+  --line: #ded8ce;
+  --line-strong: #bfb7ac;
+  --accent: #b95332;
+  --accent-dark: #a04021;
+  --gold: #b8914b;
+  --error: #ba1a1a;
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-control: 10px;
+  --radius-card: 14px;
+  --radius-large: 18px;
+  --radius-modal: 22px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 32px;
+  --space-xl: 64px;
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --duration-slow: 320ms;
+  --duration-hero: 420ms;
+  font-family: "Poppins", sans-serif;
+  color: var(--ink);
+  background: var(--canvas);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--canvas); }
+button, input { font: inherit; }
+.tably-brand { font-size: 1.35rem; font-weight: 600; letter-spacing: -0.06em; }
+.tably-brand span { color: var(--accent); }
+.tably-button { min-height: 44px; border: 0; border-radius: var(--radius-control); background: var(--accent); color: #fff; padding: 0.7rem 1.2rem; font-weight: 600; cursor: pointer; transition: background-color var(--duration-fast) var(--ease-standard), transform var(--duration-instant) var(--ease-standard); }
+.tably-button:hover { background: var(--accent-dark); }
+.tably-button:active { transform: scale(0.98); }
+.tably-button:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

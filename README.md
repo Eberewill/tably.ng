@@ -11,11 +11,15 @@ Premium restaurant ordering and operations for dine-in and pickup.
 - `packages/*` — shared UI, contracts, domain logic, validation, and print layouts
 - `native/*` — Rust crates for printing, offline sync, and device integration
 
+## Design system
+
+The Hospitality Editorial design system is the product UI contract across customer web, restaurant web, tablet, and desktop. Read the canonical [design system](docs/Tably-ng-Design-System-v2.1.md) before changing UI. Shared tokens and controls live in `packages/ui`; run `pnpm design:check` to enforce the core visual constraints.
+
 ## Start
 
 ```bash
-corepack pnpm install
-corepack pnpm dev
+pnpm install
+pnpm dev
 ```
 
 Customer web runs on port 3000 and restaurant web on port 3001. Install the Rust toolchain and platform prerequisites before running `pnpm --filter @tably/restaurant-desktop tauri dev`.
