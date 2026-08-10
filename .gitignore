@@ -6,6 +6,6 @@ dist
 !.env.example
 target
 src-tauri/target
+apps/api/bin
 *.log
 .DS_Store
-
