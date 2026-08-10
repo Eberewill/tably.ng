@@ -6,7 +6,8 @@
     "dev": "corepack pnpm --parallel --filter './apps/*' dev",
     "build": "corepack pnpm -r --if-present build",
     "typecheck": "corepack pnpm -r typecheck",
-    "test": "corepack pnpm -r test",
+    "test": "corepack pnpm design:check && corepack pnpm -r test",
+    "design:check": "node scripts/check-design-system.mjs",
     "format": "prettier --write ."
   },
   "devDependencies": {
