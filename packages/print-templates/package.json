@@ -1,0 +1,1 @@
+{"name":"@tably/print-templates","version":"0.0.0","private":true,"type":"module","exports":"./src/index.ts","scripts":{"typecheck":"tsc --noEmit"},"dependencies":{"@tably/order-domain":"workspace:*"},"devDependencies":{"typescript":"^5.9.2"}}
