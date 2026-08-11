@@ -20,7 +20,10 @@ type NavigationIcon =
   | "history"
   | "analytics"
   | "team"
-  | "settings";
+  | "settings"
+  | "notifications"
+  | "help"
+  | "logout";
 
 const navigation: ReadonlyArray<{
   icon: NavigationIcon;
@@ -84,6 +87,24 @@ function NavigationIcon({ name }: { name: NavigationIcon }) {
         <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z" />
       </>
     ),
+    notifications: (
+      <>
+        <path d="M6 17h12l-1.5-2v-4a4.5 4.5 0 0 0-9 0v4L6 17Z" />
+        <path d="M10 20h4" />
+      </>
+    ),
+    help: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M9.8 9a2.4 2.4 0 1 1 3.4 2.2c-.8.4-1.2.9-1.2 1.8M12 17h.01" />
+      </>
+    ),
+    logout: (
+      <>
+        <path d="M14 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-3" />
+        <path d="M10 12h11M18 9l3 3-3 3" />
+      </>
+    ),
   };
 
   return (
@@ -93,7 +114,7 @@ function NavigationIcon({ name }: { name: NavigationIcon }) {
   );
 }
 
-function UserMenu({ onSignOut }: { onSignOut: () => void }) {
+function UserMenu({ onNavigate, onSignOut }: { onNavigate: (page: AppPage) => void; onSignOut: () => void }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -102,9 +123,21 @@ function UserMenu({ onSignOut }: { onSignOut: () => void }) {
     const close = (event: PointerEvent) => {
       if (!menuRef.current?.contains(event.target as Node)) setOpen(false);
     };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
     window.addEventListener("pointerdown", close);
-    return () => window.removeEventListener("pointerdown", close);
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      window.removeEventListener("pointerdown", close);
+      window.removeEventListener("keydown", closeOnEscape);
+    };
   }, [open]);
+
+  function navigate(page: AppPage) {
+    onNavigate(page);
+    setOpen(false);
+  }
 
   return (
     <div className="desktop-user-menu" ref={menuRef}>
@@ -115,22 +148,26 @@ function UserMenu({ onSignOut }: { onSignOut: () => void }) {
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
       >
-        <span className="desktop-user-avatar" aria-hidden="true">AY</span>
+        <span className="desktop-user-avatar" aria-hidden="true">ZG</span>
         <span className="desktop-user-copy">
-          <strong>Amina Yusuf</strong>
-          <small>Zuma Grill · Manager</small>
+          <strong>Zuma Grill Maitama</strong>
         </span>
         <span className="desktop-user-chevron" aria-hidden="true">⌄</span>
       </button>
       {open && (
         <div className="desktop-user-dropdown" role="menu">
-          <header>
-            <strong>Amina Yusuf</strong>
-            <span>amina@zumagrill.ng</span>
-          </header>
-          <button type="button" role="menuitem">Account settings</button>
-          <button type="button" role="menuitem">Switch restaurant</button>
-          <button type="button" role="menuitem" onClick={onSignOut}>Sign out</button>
+          <button className="desktop-user-profile" type="button" role="menuitem" onClick={() => navigate("settings")}>
+            <span className="desktop-user-avatar" aria-hidden="true">ZG</span>
+            <span><strong>Zuma Grill Maitama</strong><small>Restaurant Owner</small></span>
+            <b aria-hidden="true">›</b>
+          </button>
+          <div className="desktop-user-links">
+            <button type="button" role="menuitem" onClick={() => navigate("settings")}><NavigationIcon name="settings" />Restaurant settings</button>
+            <button type="button" role="menuitem" onClick={() => navigate("team")}><NavigationIcon name="team" />Team management</button>
+            <button type="button" role="menuitem" onClick={() => navigate("settings")}><NavigationIcon name="notifications" />Notifications</button>
+            <button type="button" role="menuitem" onClick={() => setOpen(false)}><NavigationIcon name="help" />Help &amp; support</button>
+          </div>
+          <button className="desktop-user-logout" type="button" role="menuitem" onClick={onSignOut}><NavigationIcon name="logout" />Log out</button>
         </div>
       )}
     </div>
@@ -158,7 +195,7 @@ function RestaurantApp({ onSignOut }: { onSignOut: () => void }) {
             </button>
           ))}
         </nav>
-        <UserMenu onSignOut={onSignOut} />
+        <UserMenu onNavigate={setActivePage} onSignOut={onSignOut} />
       </header>
       {activePage === "dashboard" ? <DashboardPage onOpenKitchen={() => setActivePage("kitchen")} /> : activePage === "kitchen" ? <OrdersOverview /> : activePage === "analytics" ? <AnalyticsDashboard /> : activePage === "menu" ? <MenuManagement /> : activePage === "team" ? <TeamManagement /> : <SettingsPage />}
     </div>
