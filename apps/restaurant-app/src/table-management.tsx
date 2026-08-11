@@ -44,12 +44,12 @@ const recentOrders = [
   ["Ginger Citrus Fizz", "₦3,600", "Served"],
 ] as const;
 
-type IconName = "table" | "download" | "search" | "grid" | "list" | "view" | "edit" | "refresh" | "close";
+type IconName = "table" | "print" | "search" | "grid" | "list" | "view" | "edit" | "refresh" | "close";
 
 function Icon({ name }: { name: IconName }) {
   const paths: Record<IconName, React.ReactNode> = {
     table: <path d="M4 8h16v6H4zM7 14v6M17 14v6M2 11h2M20 11h2M7 8V5h10v3" />,
-    download: <><path d="M12 3v12M8 11l4 4 4-4M4 20h16" /></>,
+    print: <><path d="M7 9V4h10v5M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2" /><path d="M7 14h10v6H7zM17 12h.01" /></>,
     search: <><circle cx="11" cy="11" r="6" /><path d="m16 16 4 4" /></>,
     grid: <><rect x="4" y="4" width="6" height="6" /><rect x="14" y="4" width="6" height="6" /><rect x="4" y="14" width="6" height="6" /><rect x="14" y="14" width="6" height="6" /></>,
     list: <><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" /></>,
@@ -70,11 +70,21 @@ function loadTables() {
   }
 }
 
-function triggerDownload(href: string, filename: string) {
-  const link = document.createElement("a");
-  link.href = href;
-  link.download = filename;
-  link.click();
+function escapeHtml(value: string | number) {
+  return String(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character] ?? character);
+}
+
+function printDocument(title: string, content: string) {
+  const frame = document.createElement("iframe");
+  frame.title = title;
+  frame.style.cssText = "position:fixed;left:-9999px;width:1px;height:1px;border:0";
+  frame.onload = () => {
+    frame.contentWindow?.focus();
+    frame.contentWindow?.print();
+    window.setTimeout(() => frame.remove(), 1_000);
+  };
+  frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>@page{margin:18mm}*{box-sizing:border-box}body{margin:0;color:#1c1c18;font-family:Poppins,Arial,sans-serif}header{margin-bottom:28px}h1,h2,p{margin:0}h1{font-size:24px;font-weight:600}header p,article p{margin-top:5px;color:#6f685f;font-size:12px}main{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}article{break-inside:avoid;text-align:center;padding:18px 8px;border-top:1px solid #ded8ce}article h2{font-size:16px;font-weight:600}img{display:block;width:180px;height:180px;margin:14px auto 0}@media(max-width:700px){main{grid-template-columns:repeat(2,1fr)}}</style></head><body>${content}</body></html>`;
+  document.body.append(frame);
 }
 
 function tableUrl(table: RestaurantTable) {
@@ -150,24 +160,22 @@ export function TableManagement() {
     setTables((current) => current.map((item) => item.id === table.id ? { ...item, status: next[item.status] } : item));
   }
 
-  function downloadQr(table: RestaurantTable) {
-    const data = qrCodes[table.id];
-    if (data) triggerDownload(data, `${table.name.toLowerCase().replaceAll(" ", "-")}-qr.png`);
+  function printQr(table: RestaurantTable) {
+    const qrCode = qrCodes[table.id];
+    if (!qrCode) return;
+    printDocument(`${table.name} QR code`, `<header><h1>Zuma Grill Maitama</h1><p>Scan to open the Tably menu</p></header><main><article><h2>${escapeHtml(table.name)}</h2><p>${escapeHtml(table.area)} · ${table.seats} seats</p><img src="${qrCode}" alt="${escapeHtml(table.name)} QR code"></article></main>`);
   }
 
-  function downloadAll() {
-    const cards = tables.map((table) => `<article><h2>${table.name}</h2><p>${table.area} · ${table.seats} seats</p><img src="${qrCodes[table.id] ?? ""}" alt="${table.name} QR code"></article>`).join("");
-    const html = `<!doctype html><meta charset="utf-8"><title>Zuma Grill table QR codes</title><style>body{font-family:Arial,sans-serif;padding:32px;color:#1c1c18}main{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}article{break-inside:avoid;text-align:center;border:1px solid #ddd;padding:18px}h2{margin:0;font-size:18px}p{color:#666;font-size:12px}img{width:180px}</style><h1>Zuma Grill Maitama</h1><main>${cards}</main>`;
-    const url = URL.createObjectURL(new Blob([html], { type: "text/html" }));
-    triggerDownload(url, "zuma-grill-table-qr-codes.html");
-    URL.revokeObjectURL(url);
+  function printAll() {
+    const cards = tables.map((table) => `<article><h2>${escapeHtml(table.name)}</h2><p>${escapeHtml(table.area)} · ${table.seats} seats</p><img src="${qrCodes[table.id] ?? ""}" alt="${escapeHtml(table.name)} QR code"></article>`).join("");
+    printDocument("Zuma Grill table QR codes", `<header><h1>Zuma Grill Maitama</h1><p>Table QR codes · ${tables.length} tables</p></header><main>${cards}</main>`);
   }
 
   return (
     <main className="table-management">
       <header className="table-heading">
         <div><h1>Table Management</h1><p>Manage restaurant tables, QR codes and availability.</p></div>
-        <div><button type="button" onClick={downloadAll}><Icon name="download" />Download all QR codes</button><button className="primary" type="button" onClick={openAdd}>+ Add new table</button></div>
+        <div><button type="button" onClick={printAll}><Icon name="print" />Print all QR codes</button><button className="primary" type="button" onClick={openAdd}>+ Add new table</button></div>
       </header>
 
       <section className="table-metrics" aria-label="Table summary">
@@ -203,7 +211,7 @@ export function TableManagement() {
           <header><div><h2>{selectedTable.name}</h2><span className={`table-status ${selectedTable.status.toLowerCase()}`}><i />{selectedTable.status}</span><p>{selectedTable.area} · {selectedTable.seats} seats</p></div><button type="button" aria-label="Close table details" onClick={() => setSelectedId("")}><Icon name="close" /></button></header>
           <nav><button className={detailTab === "details" ? "active" : ""} type="button" onClick={() => setDetailTab("details")}>Table details</button><button className={detailTab === "history" ? "active" : ""} type="button" onClick={() => setDetailTab("history")}>Order history</button></nav>
           {detailTab === "details" ? <>
-            <section className="table-qr-detail"><div><h3>QR code</h3><img src={qrCodes[selectedTable.id]} alt={`${selectedTable.name} QR code`} /><button type="button" onClick={() => downloadQr(selectedTable)}><Icon name="download" />Download QR code</button><button className="regenerate" type="button" onClick={() => regenerate(selectedTable)}><Icon name="refresh" />Regenerate code</button></div><dl><div><dt>Table name</dt><dd>{selectedTable.name}</dd></div><div><dt>Area</dt><dd>{selectedTable.area}</dd></div><div><dt>Capacity</dt><dd>{selectedTable.seats} seats</dd></div><div><dt>Status</dt><dd><span className={`table-status ${selectedTable.status.toLowerCase()}`}><i />{selectedTable.status}</span></dd></div></dl></section>
+            <section className="table-qr-detail"><div><h3>QR code</h3><img src={qrCodes[selectedTable.id]} alt={`${selectedTable.name} QR code`} /><button type="button" onClick={() => printQr(selectedTable)}><Icon name="print" />Print QR code</button><button className="regenerate" type="button" onClick={() => regenerate(selectedTable)}><Icon name="refresh" />Regenerate code</button></div><dl><div><dt>Table name</dt><dd>{selectedTable.name}</dd></div><div><dt>Area</dt><dd>{selectedTable.area}</dd></div><div><dt>Capacity</dt><dd>{selectedTable.seats} seats</dd></div><div><dt>Status</dt><dd><span className={`table-status ${selectedTable.status.toLowerCase()}`}><i />{selectedTable.status}</span></dd></div></dl></section>
             <section className="table-session"><h3>Current session</h3>{selectedTable.status === "Occupied" ? <dl><div><dt>Current party</dt><dd>2 guests</dd></div><div><dt>Seated</dt><dd>7:15 PM</dd></div><div><dt>Ordered items</dt><dd>3 items</dd></div></dl> : <p>No active party at this table.</p>}<button type="button" onClick={() => changeStatus(selectedTable)}>{selectedTable.status === "Available" ? "Mark as occupied" : selectedTable.status === "Occupied" ? "Mark for cleaning" : "Mark as available"}</button></section>
             <section className="table-recent-orders"><header><h3>Recent orders</h3><button type="button" onClick={() => setDetailTab("history")}>View all</button></header>{recentOrders.map(([name, price, orderStatus]) => <article key={name}><span><strong>{name}</strong><small>Today · Dine in</small></span><span><b>{price}</b><em>{orderStatus}</em></span></article>)}</section>
           </> : <section className="table-history"><h3>Order history</h3>{recentOrders.concat(recentOrders).map(([name, price, orderStatus], index) => <article key={`${name}-${index}`}><span><strong>{name}</strong><small>{index < 3 ? "Today" : "Yesterday"} · Dine in</small></span><span><b>{price}</b><em>{orderStatus}</em></span></article>)}</section>}
