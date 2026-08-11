@@ -405,7 +405,6 @@ function DishEditor({ dish, isNew, menuItems, onClose, onSave }: {
 }
 
 export function MenuManagement() {
-  const pageSize = 8;
   const [dishes, setDishes] = useState<Dish[]>(readStoredDishes);
   const [category, setCategory] = useState("All Items");
   const [query, setQuery] = useState("");
@@ -416,6 +415,7 @@ export function MenuManagement() {
   const [isNew, setIsNew] = useState(false);
   const [message, setMessage] = useState("");
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(8);
 
   useEffect(() => {
     try {
@@ -434,8 +434,11 @@ export function MenuManagement() {
   const currentPage = Math.min(page, totalPages);
   const pageStart = (currentPage - 1) * pageSize;
   const paginatedDishes = filteredDishes.slice(pageStart, pageStart + pageSize);
+  const visiblePages = totalPages <= 5
+    ? Array.from({ length: totalPages }, (_, index) => index + 1)
+    : currentPage <= 3 ? [2, 3] : currentPage >= totalPages - 2 ? [totalPages - 2, totalPages - 1] : [currentPage - 1, currentPage, currentPage + 1];
 
-  useEffect(() => setPage(1), [category, query, sort, status]);
+  useEffect(() => setPage(1), [category, pageSize, query, sort, status]);
 
   const counts = {
     available: dishes.filter((dish) => dish.status === "Available").length,
@@ -499,12 +502,17 @@ export function MenuManagement() {
         </div>
         <p className="menu-save-message" aria-live="polite">{message}</p>
         {filteredDishes.length > 0 && <nav className="menu-pagination" aria-label="Menu pagination">
-          <span>Showing {pageStart + 1}–{Math.min(pageStart + pageSize, filteredDishes.length)} of {filteredDishes.length}</span>
-          <div>
+          <span className="menu-pagination-summary">Showing {pageStart + 1} to {Math.min(pageStart + pageSize, filteredDishes.length)} of {filteredDishes.length} items</span>
+          <div className="menu-pagination-pages">
             <button type="button" aria-label="Previous page" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>‹</button>
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => <button key={pageNumber} className={currentPage === pageNumber ? "active" : ""} type="button" aria-current={currentPage === pageNumber ? "page" : undefined} onClick={() => setPage(pageNumber)}>{pageNumber}</button>)}
+            {totalPages > 5 && <button className={currentPage === 1 ? "active" : ""} type="button" aria-current={currentPage === 1 ? "page" : undefined} onClick={() => setPage(1)}>1</button>}
+            {totalPages > 5 && currentPage > 3 && <span aria-hidden="true">…</span>}
+            {visiblePages.map((pageNumber) => <button key={pageNumber} className={currentPage === pageNumber ? "active" : ""} type="button" aria-current={currentPage === pageNumber ? "page" : undefined} onClick={() => setPage(pageNumber)}>{pageNumber}</button>)}
+            {totalPages > 5 && currentPage < totalPages - 2 && <span aria-hidden="true">…</span>}
+            {totalPages > 5 && <button className={currentPage === totalPages ? "active" : ""} type="button" aria-current={currentPage === totalPages ? "page" : undefined} onClick={() => setPage(totalPages)}>{totalPages}</button>}
             <button type="button" aria-label="Next page" disabled={currentPage === totalPages} onClick={() => setPage(currentPage + 1)}>›</button>
           </div>
+          <label className="menu-page-size"><span>Items per page</span><select value={pageSize} onChange={(event) => setPageSize(Number(event.target.value))}><option value="8">8</option><option value="10">10</option><option value="20">20</option></select></label>
         </nav>}
       </div>
 
