@@ -48,12 +48,22 @@
   display: flex;
   width: min(280px, 24vw);
   min-width: 190px;
-  min-height: 40px;
+  min-height: 44px;
   align-items: center;
   gap: 9px;
-  border-radius: var(--radius-control);
-  background: var(--surface-container-low);
-  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-primary);
+  padding: 0 14px;
+  outline: 1px solid var(--line);
+  transition: color 160ms ease, outline-color 160ms ease;
+}
+
+.menu-management-actions > label:hover {
+  outline-color: var(--line-strong);
+}
+
+.menu-management-actions > label:focus-within {
+  outline-color: var(--gold);
 }
 
 .menu-management-actions input {
@@ -62,7 +72,7 @@
   outline: 0;
   background: transparent;
   color: var(--ink);
-  font-size: 0.68rem;
+  font-size: 0.78rem;
 }
 
 .menu-management-actions svg,
@@ -85,20 +95,23 @@
 .menu-management-actions > button,
 .menu-list-toolbar button {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 8px;
   border: 0;
-  border-radius: var(--radius-control);
-  background: var(--surface-container-low);
+  border-radius: var(--radius-sm);
+  background: var(--surface-primary);
   color: var(--ink-secondary);
   padding: 0 14px;
-  font-size: 0.68rem;
+  font-size: 0.72rem;
+  outline: 1px solid var(--line);
+  transition: color 160ms ease, outline-color 160ms ease, background-color 160ms ease;
   cursor: pointer;
 }
 
 .menu-management-actions > button:hover,
+.menu-management-actions > button.active,
 .menu-list-toolbar button:hover,
 .menu-list-toolbar button.active {
   color: var(--accent-dark);
@@ -111,6 +124,7 @@
   background: var(--accent);
   color: white;
   font-weight: 500;
+  outline: 0;
 }
 
 .menu-management-actions .menu-add-button:hover {
@@ -258,13 +272,23 @@
 }
 
 .menu-list-toolbar label {
-  min-height: 38px;
+  min-height: 44px;
   gap: 7px;
-  border-radius: var(--radius-control);
-  background: var(--surface-container-low);
-  padding: 0 11px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-primary);
+  padding: 0 14px;
   color: var(--muted);
-  font-size: 0.65rem;
+  font-size: 0.72rem;
+  outline: 1px solid var(--line);
+  transition: outline-color 160ms ease;
+}
+
+.menu-list-toolbar label:hover {
+  outline-color: var(--line-strong);
+}
+
+.menu-list-toolbar label:focus-within {
+  outline-color: var(--gold);
 }
 
 .menu-list-toolbar select {
@@ -278,15 +302,17 @@
 
 .menu-list-toolbar > div > span {
   overflow: hidden;
-  border-radius: var(--radius-control);
-  background: var(--surface-container-low);
+  border-radius: var(--radius-sm);
+  background: var(--surface-primary);
+  outline: 1px solid var(--line);
 }
 
 .menu-list-toolbar button {
-  width: 40px;
-  min-height: 38px;
+  width: 44px;
+  min-height: 44px;
   border-radius: 0;
   padding: 0;
+  outline: 0;
 }
 
 .menu-list-toolbar button:hover,
@@ -511,6 +537,51 @@
   min-height: 20px;
   margin: 12px 0 0;
   color: #24763d;
+}
+
+.menu-pagination {
+  position: sticky;
+  z-index: 3;
+  bottom: 0;
+  display: flex;
+  min-height: 58px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+  background: var(--surface-primary);
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.menu-pagination > div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.menu-pagination button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-secondary);
+  cursor: pointer;
+}
+
+.menu-pagination button:hover:not(:disabled),
+.menu-pagination button.active {
+  background: var(--surface-container-low);
+  color: var(--accent-dark);
+  outline: 1px solid var(--accent);
+}
+
+.menu-pagination button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .menu-management.editing .menu-management-actions > label {
@@ -798,6 +869,14 @@
   color: var(--muted);
   font-size: 0.56rem;
   line-height: 1.5;
+}
+
+.dish-customisations:disabled {
+  opacity: 0.55;
+}
+
+.dish-customisations:disabled button {
+  cursor: not-allowed;
 }
 
 .dish-customisation-list {
@@ -1526,7 +1605,13 @@
   }
 
   .menu-list-toolbar label {
-    min-height: 34px;
+    min-height: 44px;
+  }
+
+  .menu-pagination {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 12px 0;
   }
 
   .menu-dish-head {

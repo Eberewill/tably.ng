@@ -283,7 +283,12 @@ function DishEditor({ dish, isNew, menuItems, onClose, onSave }: {
       setError("Add a dish name, category and valid price before saving.");
       return;
     }
-    onSave({ ...draft, name: draft.name.trim(), description: draft.description.trim() });
+    onSave({
+      ...draft,
+      name: draft.name.trim(),
+      description: draft.description.trim(),
+      customisations: draft.dishType === "Add-on" ? [] : draft.customisations,
+    });
   }
 
   function uploadImage(file?: File) {
@@ -341,13 +346,13 @@ function DishEditor({ dish, isNew, menuItems, onClose, onSave }: {
             </div>
             <span className="dish-group-label">Dish type</span>
             <div className="dish-type-options">
-              {(["Single", "Combo", "Add-on"] as DishType[]).map((type) => <label key={type}><input type="radio" name="dish-type" checked={draft.dishType === type} onChange={() => update("dishType", type)} /><span><strong>{type}</strong><small>{dishTypeCopy[type]}</small></span></label>)}
+              {(["Single", "Combo", "Add-on"] as DishType[]).map((type) => <label key={type}><input type="radio" name="dish-type" checked={draft.dishType === type} onChange={() => setDraft((current) => ({ ...current, dishType: type, customisations: type === "Add-on" ? [] : current.customisations }))} /><span><strong>{type}</strong><small>{dishTypeCopy[type]}</small></span></label>)}
             </div>
           </fieldset>
 
-          <fieldset className="dish-customisations">
+          <fieldset className="dish-customisations" disabled={draft.dishType === "Add-on"}>
             <legend>Customisations</legend>
-            <p>Categories describe what guests choose. Every option references an existing menu item.</p>
+            <p>{draft.dishType === "Add-on" ? "Add-on items cannot have their own customisations." : "Categories describe what guests choose. Every option references an existing menu item."}</p>
             <div className="dish-customisation-list">
               {draft.customisations.map((group) => <article key={group.id}>
                 <header><div><h3>{group.category}</h3><span>{group.required ? "Required" : "Optional"} · {group.selection === "one" ? "Choose 1" : "Choose multiple"}</span></div><strong>{group.options.length} {group.options.length === 1 ? "option" : "options"}</strong></header>
@@ -398,6 +403,7 @@ function DishEditor({ dish, isNew, menuItems, onClose, onSave }: {
 }
 
 export function MenuManagement() {
+  const pageSize = 8;
   const [dishes, setDishes] = useState<Dish[]>(readStoredDishes);
   const [category, setCategory] = useState("All Items");
   const [query, setQuery] = useState("");
@@ -407,6 +413,7 @@ export function MenuManagement() {
   const [editing, setEditing] = useState<Dish>();
   const [isNew, setIsNew] = useState(false);
   const [message, setMessage] = useState("");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     try {
@@ -421,6 +428,12 @@ export function MenuManagement() {
     .filter((dish) => status === "All" || dish.status === status)
     .filter((dish) => `${dish.name} ${dish.description} ${dish.tags.join(" ")}`.toLowerCase().includes(query.trim().toLowerCase()))
     .sort((left, right) => sort === "price-high" ? right.price - left.price : sort === "price-low" ? left.price - right.price : left.name.localeCompare(right.name)), [category, dishes, query, sort, status]);
+  const totalPages = Math.max(1, Math.ceil(filteredDishes.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const pageStart = (currentPage - 1) * pageSize;
+  const paginatedDishes = filteredDishes.slice(pageStart, pageStart + pageSize);
+
+  useEffect(() => setPage(1), [category, query, sort, status]);
 
   const counts = {
     available: dishes.filter((dish) => dish.status === "Available").length,
@@ -436,6 +449,7 @@ export function MenuManagement() {
     setDishes((current) => isNew ? [dish, ...current] : current.map((item) => item.id === dish.id ? dish : item));
     setEditing(undefined);
     setIsNew(false);
+    setPage(1);
     setMessage(`${dish.name} ${isNew ? "was added" : "was updated"}.`);
   }
 
@@ -445,8 +459,8 @@ export function MenuManagement() {
         <header className="menu-management-heading">
           <div><h1>Menu Management</h1><p>Create and manage your dishes, categories and modifiers.</p></div>
           <div className="menu-management-actions">
-            <label><Icon name="search" /><span className="sr-only">Search dishes</span><input type="search" placeholder="Search dishes…" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
-            <button type="button" onClick={cycleStatus}><Icon name="filter" />{status === "All" ? "Filters" : status}</button>
+            <label className="menu-search"><Icon name="search" /><span className="sr-only">Search dishes</span><input type="search" placeholder="Search dishes…" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
+            <button className={status === "All" ? "menu-filter-button" : "menu-filter-button active"} type="button" aria-pressed={status !== "All"} onClick={cycleStatus}><Icon name="filter" />{status === "All" ? "Filter" : status}</button>
             {!editing && <button className="menu-add-button" type="button" onClick={() => { setEditing(emptyDish()); setIsNew(true); }}>+ Add New Dish</button>}
           </div>
         </header>
@@ -470,7 +484,7 @@ export function MenuManagement() {
 
         <div className="menu-dish-list" data-view={view}>
           {view === "list" && <div className="menu-dish-head"><span>Dish</span><span>Category</span><span>Price</span><span>Status</span><span>Dietary tags</span><span>Availability</span><span>Actions</span></div>}
-          {filteredDishes.map((dish) => <article key={dish.id} className={editing?.id === dish.id ? "selected" : ""}>
+          {paginatedDishes.map((dish) => <article key={dish.id} className={editing?.id === dish.id ? "selected" : ""}>
             <div className="menu-dish-identity"><img src={dish.image} alt="" /><span><strong>{dish.name}</strong><small>{dish.description}</small></span></div>
             <span className="menu-category-label">{dish.category}</span>
             <strong className="menu-dish-price">{money.format(dish.price)}</strong>
@@ -482,6 +496,14 @@ export function MenuManagement() {
           {filteredDishes.length === 0 && <div className="menu-empty"><strong>No dishes found</strong><p>Try another search, category or status filter.</p><button type="button" onClick={() => { setQuery(""); setCategory("All Items"); setStatus("All"); }}>Clear filters</button></div>}
         </div>
         <p className="menu-save-message" aria-live="polite">{message}</p>
+        {filteredDishes.length > 0 && <nav className="menu-pagination" aria-label="Menu pagination">
+          <span>Showing {pageStart + 1}–{Math.min(pageStart + pageSize, filteredDishes.length)} of {filteredDishes.length}</span>
+          <div>
+            <button type="button" aria-label="Previous page" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>‹</button>
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => <button key={pageNumber} className={currentPage === pageNumber ? "active" : ""} type="button" aria-current={currentPage === pageNumber ? "page" : undefined} onClick={() => setPage(pageNumber)}>{pageNumber}</button>)}
+            <button type="button" aria-label="Next page" disabled={currentPage === totalPages} onClick={() => setPage(currentPage + 1)}>›</button>
+          </div>
+        </nav>}
       </div>
 
       {editing && <DishEditor key={editing.id} dish={editing} isNew={isNew} menuItems={dishes} onClose={() => { setEditing(undefined); setIsNew(false); }} onSave={saveDish} />}

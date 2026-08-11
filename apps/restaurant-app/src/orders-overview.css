@@ -43,6 +43,11 @@
   background: var(--surface-primary);
   padding: 0 14px;
   outline: 1px solid var(--line);
+  transition: outline-color 160ms ease;
+}
+
+.orders-search:hover {
+  outline-color: var(--line-strong);
 }
 
 .orders-search:focus-within {
@@ -91,6 +96,7 @@
   color: var(--ink-secondary);
   padding: 0 16px;
   outline: 1px solid var(--line);
+  transition: color 160ms ease, outline-color 160ms ease, background-color 160ms ease;
   cursor: pointer;
 }
 

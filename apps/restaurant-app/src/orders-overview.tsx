@@ -145,7 +145,7 @@ export function OrdersOverview() {
               onChange={(event) => setQuery(event.target.value)}
             />
           </label>
-          <button onClick={cycleService} aria-label={`Service filter: ${service}`}>
+          <button className={service === "All" ? "" : "active"} aria-pressed={service !== "All"} onClick={cycleService} aria-label={`Service filter: ${service}`}>
             <FilterIcon />
             <span>{service === "All" ? "Filter" : service}</span>
           </button>
