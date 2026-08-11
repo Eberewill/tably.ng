@@ -1,20 +1,148 @@
-.shell { display: grid; grid-template-columns: 240px minmax(0, 1280px); min-height: 100vh; justify-content: center; }
-.shell > aside { background: var(--ink); color: #fff; padding: 32px; display: flex; flex-direction: column; }
-.shell > aside nav { line-height: 3; color: var(--surface-dim); margin-top: 60px; }
-.shell > aside nav b { color: #fff; font-weight: 600; }
-.shell > aside small { margin-top: auto; color: var(--surface-dim); line-height: 1.7; }
-.shell main { padding: 42px clamp(28px, 5vw, 64px); }
-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); }
-header small { color: var(--accent); letter-spacing: 0.1em; font-weight: 600; }
-h1 { letter-spacing: -0.01em; font-size: 2.25rem; font-weight: 500; margin: 0.4rem 0; }
-h2 { font-size: 1.75rem; font-weight: 500; }
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin: 42px 0; }
-.stats article { padding-bottom: 22px; border-bottom: 1px solid var(--line); }
-.stats span, .stats small { display: block; color: var(--muted); }
-.stats b { display: block; font-size: 2.2rem; font-weight: 500; margin: 15px 0; font-variant-numeric: tabular-nums; }
-.orders { display: grid; }
-.orders article { display: grid; grid-template-columns: 80px 1fr 120px auto; align-items: center; gap: var(--space-md); padding: 18px 0; border-bottom: 1px solid var(--line); }
-.orders strong { font-variant-numeric: tabular-nums; }
-.orders em { font-style: normal; color: var(--accent); }
-.orders button { border: 0; background: none; color: var(--ink); font-weight: 600; cursor: pointer; }
-@media (max-width: 800px) { .shell { grid-template-columns: 1fr; } .shell > aside { display: none; } .stats { grid-template-columns: 1fr; gap: var(--space-md); } .orders article { grid-template-columns: 60px 1fr; } .orders em, .orders button { margin-top: 10px; } }
+.restaurant-shell {
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  min-height: 100vh;
+  background: var(--surface);
+}
+.restaurant-sidebar {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  padding: 38px 26px 28px;
+  border-right: 1px solid var(--line);
+}
+.restaurant-sidebar > p {
+  margin: 38px 0 28px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.restaurant-sidebar nav,
+.restaurant-sidebar footer {
+  display: grid;
+  gap: 8px;
+}
+.restaurant-sidebar button {
+  min-height: 44px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink-secondary);
+  padding: 0 14px;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-align: left;
+  cursor: pointer;
+}
+.restaurant-sidebar nav button.active {
+  background: transparent;
+  color: var(--accent);
+  font-weight: 600;
+}
+.new-reservation {
+  width: 100%;
+  margin-top: auto;
+  border: 0 !important;
+  background: var(--accent) !important;
+  color: #fff !important;
+  text-align: center !important;
+}
+.restaurant-sidebar footer {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.restaurant-workspace {
+  min-width: 0;
+}
+.restaurant-header {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  display: flex;
+  min-height: 88px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  padding: 0 48px;
+}
+.restaurant-header > div {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+}
+.restaurant-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.restaurant-header h1 i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.restaurant-header p {
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: 0.86rem;
+}
+.restaurant-header nav {
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  gap: 24px;
+}
+.restaurant-header nav button {
+  align-self: stretch;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--ink-secondary);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.restaurant-header nav button.active {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.restaurant-workspace > main {
+  padding: 48px;
+}
+@media (max-width: 980px) {
+  .restaurant-shell {
+    grid-template-columns: 1fr;
+  }
+  .restaurant-sidebar {
+    display: none;
+  }
+}
+@media (max-width: 640px) {
+  .restaurant-header {
+    min-height: 76px;
+    padding: 0 20px;
+  }
+  .restaurant-header > div {
+    display: block;
+  }
+  .restaurant-header p {
+    margin-top: 4px;
+  }
+  .restaurant-header nav {
+    display: none;
+  }
+  .restaurant-workspace > main {
+    padding: 24px 20px;
+  }
+}
