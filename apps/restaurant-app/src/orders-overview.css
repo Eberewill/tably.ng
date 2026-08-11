@@ -522,11 +522,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.orders-live-summary dl > div:last-child dd {
-  font-size: 1.05rem;
-  font-weight: 600;
-}
-
 .orders-auto-refresh {
   display: flex;
   align-items: center;

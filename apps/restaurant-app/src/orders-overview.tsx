@@ -310,10 +310,10 @@ export function OrdersOverview() {
         <strong><i aria-hidden="true">⌁</i> Live summary</strong>
         <dl>
           <div><dt>Total orders</dt><dd>{orders.length}</dd></div>
+          <div><dt>New</dt><dd>{orders.filter((order) => order.status === "New").length}</dd></div>
           <div><dt>Preparing</dt><dd>{orders.filter((order) => order.status === "Preparing").length}</dd></div>
           <div><dt>Ready</dt><dd>{orders.filter((order) => order.status === "Ready").length}</dd></div>
           <div><dt>Completed</dt><dd>{orders.filter((order) => order.status === "Completed").length}</dd></div>
-          <div><dt>Total sales</dt><dd>{money.format(orders.reduce((total, order) => total + orderTotal(order), 0))}</dd></div>
         </dl>
         <span className="orders-auto-refresh"><i aria-hidden="true" /> Auto refresh · 30s</span>
       </footer>
