@@ -8,16 +8,17 @@ import { DashboardPage } from "./dashboard-page";
 import { MenuManagement } from "./menu-management";
 import { OrdersOverview } from "./orders-overview";
 import { SettingsPage } from "./settings-page";
+import { TableManagement } from "./table-management";
 import { TeamManagement } from "./team-management";
 import "./style.css";
 
-type AppPage = "dashboard" | "kitchen" | "menu" | "analytics" | "team" | "settings";
+type AppPage = "dashboard" | "kitchen" | "menu" | "tables" | "analytics" | "team" | "settings";
 
 type NavigationIcon =
   | "dashboard"
   | "kitchen"
   | "menu"
-  | "history"
+  | "tables"
   | "analytics"
   | "team"
   | "settings"
@@ -33,7 +34,7 @@ const navigation: ReadonlyArray<{
   { icon: "dashboard", label: "Dashboard", page: "dashboard" },
   { icon: "kitchen", label: "Kitchen", page: "kitchen" },
   { icon: "menu", label: "Menu", page: "menu" },
-  { icon: "history", label: "Order history" },
+  { icon: "tables", label: "Tables", page: "tables" },
   { icon: "analytics", label: "Analytics", page: "analytics" },
   { icon: "team", label: "Team", page: "team" },
   { icon: "settings", label: "Settings", page: "settings" },
@@ -62,10 +63,9 @@ function NavigationIcon({ name }: { name: NavigationIcon }) {
         <path d="M9 9V6a3 3 0 0 1 6 0v3" />
       </>
     ),
-    history: (
+    tables: (
       <>
-        <rect x="5" y="4" width="14" height="17" rx="2" />
-        <path d="M9 3h6v4H9zM9 11h6M9 15h6M9 19h4" />
+        <path d="M4 8h16v6H4zM7 14v6M17 14v6M2 11h2M20 11h2M7 8V5h10v3" />
       </>
     ),
     analytics: (
@@ -197,7 +197,7 @@ function RestaurantApp({ onSignOut }: { onSignOut: () => void }) {
         </nav>
         <UserMenu onNavigate={setActivePage} onSignOut={onSignOut} />
       </header>
-      {activePage === "dashboard" ? <DashboardPage onOpenKitchen={() => setActivePage("kitchen")} /> : activePage === "kitchen" ? <OrdersOverview /> : activePage === "analytics" ? <AnalyticsDashboard /> : activePage === "menu" ? <MenuManagement /> : activePage === "team" ? <TeamManagement /> : <SettingsPage />}
+      {activePage === "dashboard" ? <DashboardPage onOpenKitchen={() => setActivePage("kitchen")} /> : activePage === "kitchen" ? <OrdersOverview /> : activePage === "tables" ? <TableManagement /> : activePage === "analytics" ? <AnalyticsDashboard /> : activePage === "menu" ? <MenuManagement /> : activePage === "team" ? <TeamManagement /> : <SettingsPage />}
     </div>
   );
 }
