@@ -6,9 +6,10 @@ import "@tably/ui/tokens.css";
 import { AnalyticsDashboard } from "./analytics/analytics-dashboard";
 import { MenuManagement } from "./menu-management";
 import { OrdersOverview } from "./orders-overview";
+import { TeamManagement } from "./team-management";
 import "./style.css";
 
-type AppPage = "orders" | "menu" | "analytics";
+type AppPage = "orders" | "menu" | "analytics" | "team";
 
 type NavigationIcon =
   | "orders"
@@ -29,7 +30,7 @@ const navigation: ReadonlyArray<{
   { icon: "menu", label: "Menu", page: "menu" },
   { icon: "history", label: "Order history" },
   { icon: "analytics", label: "Analytics", page: "analytics" },
-  { icon: "team", label: "Team" },
+  { icon: "team", label: "Team", page: "team" },
   { icon: "settings", label: "Settings" },
 ];
 
@@ -157,7 +158,7 @@ function RestaurantApp({ onSignOut }: { onSignOut: () => void }) {
         </nav>
         <UserMenu onSignOut={onSignOut} />
       </header>
-      {activePage === "analytics" ? <AnalyticsDashboard /> : activePage === "menu" ? <MenuManagement /> : <OrdersOverview />}
+      {activePage === "analytics" ? <AnalyticsDashboard /> : activePage === "menu" ? <MenuManagement /> : activePage === "team" ? <TeamManagement /> : <OrdersOverview />}
     </div>
   );
 }
