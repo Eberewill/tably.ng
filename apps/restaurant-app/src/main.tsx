@@ -6,10 +6,11 @@ import "@tably/ui/tokens.css";
 import { AnalyticsDashboard } from "./analytics/analytics-dashboard";
 import { MenuManagement } from "./menu-management";
 import { OrdersOverview } from "./orders-overview";
+import { SettingsPage } from "./settings-page";
 import { TeamManagement } from "./team-management";
 import "./style.css";
 
-type AppPage = "orders" | "menu" | "analytics" | "team";
+type AppPage = "orders" | "menu" | "analytics" | "team" | "settings";
 
 type NavigationIcon =
   | "orders"
@@ -31,7 +32,7 @@ const navigation: ReadonlyArray<{
   { icon: "history", label: "Order history" },
   { icon: "analytics", label: "Analytics", page: "analytics" },
   { icon: "team", label: "Team", page: "team" },
-  { icon: "settings", label: "Settings" },
+  { icon: "settings", label: "Settings", page: "settings" },
 ];
 
 function NavigationIcon({ name }: { name: NavigationIcon }) {
@@ -79,7 +80,7 @@ function NavigationIcon({ name }: { name: NavigationIcon }) {
     settings: (
       <>
         <circle cx="12" cy="12" r="3" />
-        <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1" />
+        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z" />
       </>
     ),
   };
@@ -158,7 +159,7 @@ function RestaurantApp({ onSignOut }: { onSignOut: () => void }) {
         </nav>
         <UserMenu onSignOut={onSignOut} />
       </header>
-      {activePage === "analytics" ? <AnalyticsDashboard /> : activePage === "menu" ? <MenuManagement /> : activePage === "team" ? <TeamManagement /> : <OrdersOverview />}
+      {activePage === "analytics" ? <AnalyticsDashboard /> : activePage === "menu" ? <MenuManagement /> : activePage === "team" ? <TeamManagement /> : activePage === "settings" ? <SettingsPage /> : <OrdersOverview />}
     </div>
   );
 }
