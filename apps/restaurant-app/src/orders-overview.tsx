@@ -307,7 +307,10 @@ export function OrdersOverview() {
       )}
 
       <footer className="orders-live-summary">
-        <strong><i aria-hidden="true">⌁</i> Live summary</strong>
+        <strong>
+          <i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 16a8 8 0 0 1 16 0M2.5 16h19M5 19h14M12 8V5" /><circle cx="12" cy="4" r="1" /></svg></i>
+          Live kitchen
+        </strong>
         <dl>
           <div><dt>Total orders</dt><dd>{orders.length}</dd></div>
           <div><dt>New</dt><dd>{orders.filter((order) => order.status === "New").length}</dd></div>
