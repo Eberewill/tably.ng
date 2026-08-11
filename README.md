@@ -5,8 +5,7 @@ Premium restaurant ordering and operations for dine-in and pickup.
 ## Workspace
 
 - `apps/customer-web` — mobile-first menu and ordering PWA
-- `apps/restaurant-web` — restaurant management and operations
-- `apps/restaurant-desktop` — Tauri desktop companion for Windows/macOS
+- `apps/restaurant-app` — canonical restaurant management app for web, desktop, and tablets
 - `apps/api` — central Go API and PostgreSQL migrations
 - `packages/*` — shared UI, contracts, domain logic, validation, and print layouts
 - `native/*` — Rust crates for printing, offline sync, and device integration
@@ -22,10 +21,10 @@ pnpm install
 pnpm dev
 ```
 
-This starts customer web on port 3000, restaurant web on port 3001, and the native restaurant desktop app. Tauri starts its own Vite frontend on port 1420. Install the Rust toolchain and platform prerequisites before running the workspace development command.
+This starts customer web on port 3000 and the native restaurant app. Tauri starts the restaurant app's Vite frontend on port 1420. Install the Rust toolchain and platform prerequisites before running the workspace development command.
 
-Run the API in a second terminal with `pnpm dev:api`. All clients use this one authoritative backend; the desktop runtime only owns local hardware and offline capabilities. For focused development, use `pnpm dev:desktop` for the native app or `pnpm dev:desktop:web` for its browser-only preview.
+Run the API in a second terminal with `pnpm dev:api`. All clients use this one authoritative backend; the native runtime only owns platform capabilities such as hardware, notifications, and offline resilience. For focused development, use `pnpm dev:app` for the native app or `pnpm dev:app:web` for its browser/static preview.
 
 ## Product boundaries
 
-The browser remains the management surface. Desktop adds printing, local resilience, auto-start, notifications, and device access. QR payloads are issued and signed by the server; clients only render them.
+`apps/restaurant-app` is the single restaurant-owner interface. Its Vite build is deployable to the web and is also packaged by Tauri for macOS, Windows, Linux, iOS, and Android. Platform-specific capabilities stay behind runtime adapters; product screens, auth, navigation, and data flows remain shared. QR payloads are issued and signed by the server; clients only render them.

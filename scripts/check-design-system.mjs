@@ -4,10 +4,8 @@ const files = [
   "packages/ui/src/tokens.css",
   "apps/customer-web/src/main.tsx",
   "apps/customer-web/src/style.css",
-  "apps/restaurant-web/src/main.tsx",
-  "apps/restaurant-web/src/style.css",
-  "apps/restaurant-desktop/src/main.tsx",
-  "apps/restaurant-desktop/src/style.css",
+  "apps/restaurant-app/src/main.tsx",
+  "apps/restaurant-app/src/style.css",
 ];
 const forbidden = [
   [/\b(?:radial|linear)-gradient\(/, "gradients are not part of the system"],

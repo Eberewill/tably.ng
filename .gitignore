@@ -6,7 +6,7 @@ dist
 !.env.example
 target
 src-tauri/target
-apps/restaurant-desktop/src-tauri/gen/schemas
+apps/restaurant-app/src-tauri/gen/schemas
 apps/api/bin
 *.log
 .DS_Store

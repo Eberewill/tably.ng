@@ -2982,7 +2982,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tably-restaurant-desktop"
+name = "tably-restaurant-app"
 version = "0.1.0"
 dependencies = [
  "serde",

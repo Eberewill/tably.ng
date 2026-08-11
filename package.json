@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "pnpm --parallel --filter './apps/*' dev",
     "dev:api": "cd apps/api && go run ./cmd/api",
-    "dev:desktop": "pnpm --filter @tably/restaurant-desktop dev",
-    "dev:desktop:web": "pnpm --filter @tably/restaurant-desktop dev:web",
+    "dev:app": "pnpm --filter @tably/restaurant-app dev",
+    "dev:app:web": "pnpm --filter @tably/restaurant-app dev:web",
     "build": "pnpm -r --if-present build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm design:check && pnpm -r test",

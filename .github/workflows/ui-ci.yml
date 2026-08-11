@@ -4,8 +4,7 @@ on:
   pull_request:
     paths:
       - "apps/customer-web/**"
-      - "apps/restaurant-web/**"
-      - "apps/restaurant-desktop/**"
+      - "apps/restaurant-app/**"
       - "packages/ui/**"
       - "scripts/check-design-system.mjs"
       - "package.json"
