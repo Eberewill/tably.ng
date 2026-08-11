@@ -9,7 +9,10 @@
 }
 
 .menu-management-list {
+  display: flex;
   min-width: 0;
+  min-height: calc(100vh - var(--desktop-nav-height));
+  flex-direction: column;
   padding: 24px clamp(28px, 3.6vw, 56px) 32px;
 }
 
@@ -558,6 +561,7 @@
   background: var(--surface-primary);
   color: var(--muted);
   font-size: 0.68rem;
+  margin-top: auto;
 }
 
 .menu-pagination-pages {

@@ -1,5 +1,7 @@
 .team-management {
+  display: flex;
   min-height: calc(100vh - var(--desktop-nav-height));
+  flex-direction: column;
   background: var(--surface);
   padding: 24px clamp(28px, 3.6vw, 56px) 32px;
 }
@@ -283,12 +285,18 @@
 .team-empty { margin: 0; padding: 48px; color: var(--muted); text-align: center; font-size: 0.68rem; }
 
 .team-pagination {
+  position: sticky;
+  z-index: 3;
+  bottom: 0;
   display: grid;
   min-height: 58px;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   gap: 18px;
+  border-top: 1px solid var(--line);
+  background: var(--surface-primary);
   color: var(--muted);
   font-size: 0.65rem;
+  margin-top: auto;
 }
 .team-pagination > div { gap: 6px; }
 .team-pagination > div button {
