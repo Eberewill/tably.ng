@@ -49,7 +49,7 @@ importers:
         specifier: ^7.1.3
         version: 7.3.6
 
-  apps/restaurant-desktop:
+  apps/restaurant-app:
     dependencies:
       '@tably/ui':
         specifier: workspace:*
@@ -67,34 +67,6 @@ importers:
       '@tauri-apps/cli':
         specifier: ^2.8.4
         version: 2.11.4
-      '@types/react':
-        specifier: ^19.1.10
-        version: 19.2.18
-      '@types/react-dom':
-        specifier: ^19.1.7
-        version: 19.2.4(@types/react@19.2.18)
-      '@vitejs/plugin-react':
-        specifier: ^5.0.2
-        version: 5.2.0(vite@7.3.6)
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.3
-      vite:
-        specifier: ^7.1.3
-        version: 7.3.6
-
-  apps/restaurant-web:
-    dependencies:
-      '@tably/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      react:
-        specifier: ^19.1.1
-        version: 19.2.8
-      react-dom:
-        specifier: ^19.1.1
-        version: 19.2.8(react@19.2.8)
-    devDependencies:
       '@types/react':
         specifier: ^19.1.10
         version: 19.2.18
