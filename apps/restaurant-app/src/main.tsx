@@ -4,10 +4,11 @@ import { isTauri } from "@tauri-apps/api/core";
 import { AuthFlow, BrandMark } from "@tably/ui";
 import "@tably/ui/tokens.css";
 import { AnalyticsDashboard } from "./analytics/analytics-dashboard";
+import { MenuManagement } from "./menu-management";
 import { OrdersOverview } from "./orders-overview";
 import "./style.css";
 
-type AppPage = "orders" | "analytics";
+type AppPage = "orders" | "menu" | "analytics";
 
 type NavigationIcon =
   | "orders"
@@ -25,7 +26,7 @@ const navigation: ReadonlyArray<{
 }> = [
   { icon: "orders", label: "Orders", page: "orders" },
   { icon: "kitchen", label: "Kitchen" },
-  { icon: "menu", label: "Menu" },
+  { icon: "menu", label: "Menu", page: "menu" },
   { icon: "history", label: "Order history" },
   { icon: "analytics", label: "Analytics", page: "analytics" },
   { icon: "team", label: "Team" },
@@ -156,7 +157,7 @@ function RestaurantApp({ onSignOut }: { onSignOut: () => void }) {
         </nav>
         <UserMenu onSignOut={onSignOut} />
       </header>
-      {activePage === "analytics" ? <AnalyticsDashboard /> : <OrdersOverview />}
+      {activePage === "analytics" ? <AnalyticsDashboard /> : activePage === "menu" ? <MenuManagement /> : <OrdersOverview />}
     </div>
   );
 }
