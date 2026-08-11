@@ -4,16 +4,17 @@ import { isTauri } from "@tauri-apps/api/core";
 import { AuthFlow, BrandMark } from "@tably/ui";
 import "@tably/ui/tokens.css";
 import { AnalyticsDashboard } from "./analytics/analytics-dashboard";
+import { DashboardPage } from "./dashboard-page";
 import { MenuManagement } from "./menu-management";
 import { OrdersOverview } from "./orders-overview";
 import { SettingsPage } from "./settings-page";
 import { TeamManagement } from "./team-management";
 import "./style.css";
 
-type AppPage = "orders" | "menu" | "analytics" | "team" | "settings";
+type AppPage = "dashboard" | "kitchen" | "menu" | "analytics" | "team" | "settings";
 
 type NavigationIcon =
-  | "orders"
+  | "dashboard"
   | "kitchen"
   | "menu"
   | "history"
@@ -26,8 +27,8 @@ const navigation: ReadonlyArray<{
   label: string;
   page?: AppPage;
 }> = [
-  { icon: "orders", label: "Orders", page: "orders" },
-  { icon: "kitchen", label: "Kitchen" },
+  { icon: "dashboard", label: "Dashboard", page: "dashboard" },
+  { icon: "kitchen", label: "Kitchen", page: "kitchen" },
   { icon: "menu", label: "Menu", page: "menu" },
   { icon: "history", label: "Order history" },
   { icon: "analytics", label: "Analytics", page: "analytics" },
@@ -37,7 +38,7 @@ const navigation: ReadonlyArray<{
 
 function NavigationIcon({ name }: { name: NavigationIcon }) {
   const paths: Record<NavigationIcon, React.ReactNode> = {
-    orders: (
+    dashboard: (
       <>
         <rect x="3" y="3" width="7" height="7" rx="1" />
         <rect x="14" y="3" width="7" height="7" rx="1" />
@@ -137,7 +138,7 @@ function UserMenu({ onSignOut }: { onSignOut: () => void }) {
 }
 
 function RestaurantApp({ onSignOut }: { onSignOut: () => void }) {
-  const [activePage, setActivePage] = useState<AppPage>("orders");
+  const [activePage, setActivePage] = useState<AppPage>("dashboard");
 
   return (
     <div className="desktop-order-board">
@@ -159,7 +160,7 @@ function RestaurantApp({ onSignOut }: { onSignOut: () => void }) {
         </nav>
         <UserMenu onSignOut={onSignOut} />
       </header>
-      {activePage === "analytics" ? <AnalyticsDashboard /> : activePage === "menu" ? <MenuManagement /> : activePage === "team" ? <TeamManagement /> : activePage === "settings" ? <SettingsPage /> : <OrdersOverview />}
+      {activePage === "dashboard" ? <DashboardPage onOpenKitchen={() => setActivePage("kitchen")} /> : activePage === "kitchen" ? <OrdersOverview /> : activePage === "analytics" ? <AnalyticsDashboard /> : activePage === "menu" ? <MenuManagement /> : activePage === "team" ? <TeamManagement /> : <SettingsPage />}
     </div>
   );
 }
