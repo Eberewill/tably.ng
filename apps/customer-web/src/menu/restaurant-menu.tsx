@@ -8,14 +8,21 @@ import { MenuCard } from "./menu-card";
 import { MenuHeader } from "./menu-header";
 import { MenuHero } from "./menu-hero";
 import { OrderReceived } from "./order-received";
-import type { CartItem, MenuCategory, MenuItem } from "./types";
+import { OrderHistory } from "./order-history";
+import { loadOrderHistory, saveOrderHistory } from "./session-orders";
+import type { CartItem, MenuCategory, MenuItem, PastOrder } from "./types";
 
-type View = "menu" | "detail" | "cart" | "received";
+type View = "menu" | "detail" | "cart" | "received" | "orders";
 
 export function RestaurantMenu() {
   const [activeCategory, setActiveCategory] = useState<MenuCategory>("Main");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [completedOrder, setCompletedOrder] = useState<CartItem[]>([]);
+  const [completedOrderStatus, setCompletedOrderStatus] = useState<
+    "preparing" | "served"
+  >("preparing");
+  const [orderHistory, setOrderHistory] =
+    useState<PastOrder[]>(loadOrderHistory);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [view, setView] = useState<View>("menu");
   const [note, setNote] = useState("");
@@ -28,6 +35,9 @@ export function RestaurantMenu() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [view]);
+  useEffect(() => {
+    saveOrderHistory(orderHistory);
+  }, [orderHistory]);
 
   function openDetail(item: MenuItem) {
     setSelectedItem(item);
@@ -64,7 +74,13 @@ export function RestaurantMenu() {
       {view !== "received" && (
         <MenuHeader
           cartCount={cartCount}
-          title={view === "menu" ? "CARTEVA" : restaurant.name}
+          title={
+            view === "menu"
+              ? "CARTEVA"
+              : view === "orders"
+                ? "ORDERS"
+                : restaurant.name
+          }
           onBack={view === "menu" ? undefined : () => setView("menu")}
           onCart={() => setView("cart")}
         />
@@ -112,7 +128,23 @@ export function RestaurantMenu() {
           }
           onAddMore={() => setView("menu")}
           onPlaceOrder={() => {
+            const total =
+              cart.reduce(
+                (sum, line) => sum + line.item.price * line.quantity,
+                0,
+              ) * 1.125;
+            setOrderHistory((current) => [
+              {
+                id: `ZUMA-${Date.now().toString().slice(-6)}`,
+                createdAt: new Date().toISOString(),
+                status: "Preparing",
+                items: cart,
+                total,
+              },
+              ...current,
+            ]);
             setCompletedOrder(cart);
+            setCompletedOrderStatus("preparing");
             setCart([]);
             setNote("");
             setView("received");
@@ -120,10 +152,32 @@ export function RestaurantMenu() {
         />
       )}
       {view === "received" && (
-        <OrderReceived order={completedOrder} onMenu={() => setView("menu")} />
+        <OrderReceived
+          order={completedOrder}
+          status={completedOrderStatus}
+          onMenu={() => setView("menu")}
+          onOrders={() => setView("orders")}
+        />
+      )}
+      {view === "orders" && (
+        <OrderHistory
+          orders={orderHistory}
+          onMenu={() => setView("menu")}
+          onSelect={(order) => {
+            setCompletedOrder(order.items);
+            setCompletedOrderStatus(
+              order.status === "Served" ? "served" : "preparing",
+            );
+            setView("received");
+          }}
+        />
       )}
       {view === "menu" && (
-        <BottomNav cartCount={cartCount} onCart={() => setView("cart")} />
+        <BottomNav
+          cartCount={cartCount}
+          onCart={() => setView("cart")}
+          onOrders={() => setView("orders")}
+        />
       )}
     </div>
   );

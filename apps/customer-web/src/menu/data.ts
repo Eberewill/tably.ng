@@ -74,6 +74,25 @@ export const menu: MenuItem[] = [
     image: images.jollof,
   },
   {
+    id: "beef-suya-skewers",
+    category: "Starters",
+    name: "Beef Suya Skewers",
+    price: 9600,
+    description:
+      "Charcoal-seared beef with yaji spice, pickled onions and a bright lime finish.",
+    image: images.ribeye,
+    tag: "GF",
+  },
+  {
+    id: "plantain-prawn-bites",
+    category: "Starters",
+    name: "Plantain Prawn Bites",
+    price: 8400,
+    description:
+      "Crisp plantain cups filled with ginger prawns, pepper relish and fresh herbs.",
+    image: images.okra,
+  },
+  {
     id: "grilled-prawns",
     category: "Grill",
     name: "Charred Tiger Prawns",
@@ -81,6 +100,16 @@ export const menu: MenuItem[] = [
     description:
       "Charcoal-grilled prawns with citrus, smoked pepper and garden greens.",
     image: images.okra,
+  },
+  {
+    id: "peppercorn-chicken",
+    category: "Grill",
+    name: "Peppercorn Half Chicken",
+    price: 15800,
+    description:
+      "Slow-marinated chicken grilled over coals with smoked pepper, lemon and garden greens.",
+    image: images.ribeye,
+    tag: "GF",
   },
   {
     id: "plantain",
@@ -92,11 +121,29 @@ export const menu: MenuItem[] = [
     image: images.jollof,
   },
   {
+    id: "coconut-rice",
+    category: "Sides",
+    name: "Coconut Jollof Rice",
+    price: 4800,
+    description:
+      "Fragrant long-grain rice cooked in coconut milk, tomato and a gentle chilli warmth.",
+    image: images.jollof,
+  },
+  {
     id: "hibiscus",
     category: "Drinks",
     name: "House Zobo",
     price: 2800,
     description: "Cold-brewed hibiscus, ginger and citrus over ice.",
+    image: images.snails,
+  },
+  {
+    id: "ginger-citrus-fizz",
+    category: "Drinks",
+    name: "Ginger Citrus Fizz",
+    price: 3600,
+    description:
+      "Fresh ginger, orange, lime and sparkling water served ice cold.",
     image: images.snails,
   },
 ];
@@ -111,6 +158,3 @@ export const restaurant = {
     image: images.jollof,
   },
 };
-
-export const orderReceivedImage =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuD4QB1Kzfu-8BNvW3uP3uHaN33FHOCg8LOE9o8AvK6SkQPo814fMGeZ0B9jKG8x5RloV6XK1J7ditWBWfFZv1hP2uATbsVeSqqO-GPVX-LHNjyj0iQAIZnUgZUKECr_4btnsEC3OPphVd-a8bX_97vTIHk8ubchHBqV62jnK7IggxT7haPAB6pVBuZsixN9xo1WQmhxV6LcT8AcazQmpwAA-HX7b_NBerFaQyCmSZEW0HMJV_jjgOdl";

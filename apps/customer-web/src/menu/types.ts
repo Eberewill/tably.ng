@@ -23,3 +23,11 @@ export type CartItem = {
   selections: string[];
   quantity: number;
 };
+
+export type PastOrder = {
+  id: string;
+  createdAt: string;
+  status: "Preparing" | "Served";
+  items: CartItem[];
+  total: number;
+};

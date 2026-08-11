@@ -6,10 +6,14 @@ type IconName =
   | "bag"
   | "cart"
   | "check"
+  | "clear"
+  | "cutlery"
+  | "download"
   | "location"
   | "menu"
   | "orders"
   | "search"
+  | "water"
   | "waiter";
 
 export function Icon({
@@ -19,6 +23,24 @@ export function Icon({
   const paths = {
     arrowLeft: <path d="m14.5 5-7 7 7 7M8 12h11" />,
     check: <path d="m7 12 3.2 3.2L17.5 8" />,
+    clear: (
+      <>
+        <path d="M5 18.5h14M7.5 15.5h9M9.5 12.5h5" />
+        <path d="m6 8 1.5-2.5h9L18 8" />
+      </>
+    ),
+    cutlery: (
+      <>
+        <path d="M7 4v7M4.5 4v4.5A2.5 2.5 0 0 0 7 11h0a2.5 2.5 0 0 0 2.5-2.5V4M7 11v9" />
+        <path d="M16.5 4v16M13.5 4v6h3" />
+      </>
+    ),
+    download: (
+      <>
+        <path d="M12 4v11" />
+        <path d="m8 11 4 4 4-4M5 20h14" />
+      </>
+    ),
     account: (
       <>
         <circle cx="12" cy="8" r="3.25" />
@@ -66,6 +88,9 @@ export function Icon({
       <>
         <path d="M4.5 17.5h15M6.5 17.5a5.5 5.5 0 0 1 11 0M12 5.5v3M8.5 8.5h7" />
       </>
+    ),
+    water: (
+      <path d="M12 3.5S6.5 10 6.5 14a5.5 5.5 0 0 0 11 0c0-4-5.5-10.5-5.5-10.5Z" />
     ),
   };
   return (

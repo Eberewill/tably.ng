@@ -1,17 +1,34 @@
 import { useState } from "react";
 import { formatNaira } from "./currency";
-import { orderReceivedImage } from "./data";
 import { Icon } from "./icons";
+import { OrderServed } from "./order-served";
+import { RequestWaiter } from "./request-waiter";
 import type { CartItem } from "./types";
 
 export function OrderReceived({
   order,
   onMenu,
+  onOrders,
+  status = "preparing",
 }: {
   order: CartItem[];
   onMenu: () => void;
+  onOrders: () => void;
+  status?: "preparing" | "served";
 }) {
-  const [waiterRequested, setWaiterRequested] = useState(false);
+  const [requestingAssistance, setRequestingAssistance] = useState(false);
+  if (status === "served") {
+    return <OrderServed order={order} onClose={onMenu} onOrderMore={onMenu} />;
+  }
+  if (requestingAssistance) {
+    return (
+      <RequestWaiter
+        onBack={() => setRequestingAssistance(false)}
+        onMenu={onMenu}
+        onOrders={onOrders}
+      />
+    );
+  }
   const subtotal = order.reduce(
     (total, line) => total + line.item.price * line.quantity,
     0,
@@ -21,11 +38,6 @@ export function OrderReceived({
   return (
     <div className="order-received">
       <main>
-        <img
-          className="received-image"
-          src={orderReceivedImage}
-          alt="Chef preparing a plated dish in the restaurant kitchen"
-        />
         <section className="received-content">
           <div className="received-heading">
             <span>
@@ -73,9 +85,9 @@ export function OrderReceived({
             </footer>
           </section>
           <div className="received-actions">
-            <button onClick={() => setWaiterRequested(true)}>
+            <button onClick={() => setRequestingAssistance(true)}>
               <Icon name="waiter" />
-              {waiterRequested ? "Waiter notified" : "Call waiter"}
+              Request assistance
             </button>
             <button onClick={onMenu}>
               <Icon name="menu" />
@@ -94,7 +106,7 @@ export function OrderReceived({
           <Icon name="search" />
           <span>Search</span>
         </button>
-        <button className="active">
+        <button className="active" onClick={onOrders}>
           <Icon name="orders" />
           <span>Orders</span>
         </button>

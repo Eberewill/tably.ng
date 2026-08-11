@@ -1,1 +1,59 @@
-import React from "react";import{createRoot}from"react-dom/client";import{BrandMark,Button}from"@tably/ui";import"@tably/ui/tokens.css";import"./style.css";const orders=[['#184','Table 12','Preparing'],['#185','Pickup','New'],['#181','Table 4','Ready']];function App(){return <div className="shell"><aside><BrandMark/><nav>Overview<br/><b>Live orders</b><br/>Menu<br/>Tables & QR<br/>Analytics<br/>Settings</nav><small>Maitama branch<br/>All systems online</small></aside><main><header><div><small>MONDAY, 10 AUGUST</small><h1>Good evening, Amina.</h1></div><Button>+ New order</Button></header><section className="stats"><article><span>Orders today</span><b>48</b><small>+12% from last Monday</small></article><article><span>Revenue</span><b>₦742k</b><small>Average order ₦15,458</small></article><article><span>Kitchen pace</span><b>18m</b><small>Inside your 22m target</small></article></section><h2>Live service</h2><section className="orders">{orders.map(o=><article key={o[0]}><strong>{o[0]}</strong><span>{o[1]}</span><em>{o[2]}</em><button>View order →</button></article>)}</section></main></div>}createRoot(document.getElementById('root')!).render(<App/>);
+import { createRoot } from "react-dom/client";
+import { BrandMark, LiveOrderBoard } from "@tably/ui";
+import "@tably/ui/tokens.css";
+import "./style.css";
+
+const navigation = [
+  "Menu management",
+  "Live orders",
+  "Floor plan",
+  "Team",
+  "Analytics",
+];
+
+function App() {
+  return (
+    <div className="restaurant-shell">
+      <aside className="restaurant-sidebar">
+        <BrandMark />
+        <p>Premium management</p>
+        <nav aria-label="Restaurant navigation">
+          {navigation.map((item) => (
+            <button
+              key={item}
+              className={item === "Live orders" ? "active" : ""}
+            >
+              {item}
+            </button>
+          ))}
+        </nav>
+        <button className="new-reservation">+ New reservation</button>
+        <footer>
+          <button>Settings</button>
+          <button>Support</button>
+        </footer>
+      </aside>
+      <section className="restaurant-workspace">
+        <header className="restaurant-header">
+          <div>
+            <h1>
+              <i aria-hidden="true" />
+              Live order feed
+            </h1>
+            <p>Zuma Grill · Maitama branch</p>
+          </div>
+          <nav aria-label="Service areas">
+            <button className="active">Main hall</button>
+            <button>Patio</button>
+            <button>Bar</button>
+          </nav>
+        </header>
+        <main>
+          <LiveOrderBoard />
+        </main>
+      </section>
+    </div>
+  );
+}
+
+createRoot(document.getElementById("root")!).render(<App />);
