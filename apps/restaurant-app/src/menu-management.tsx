@@ -205,15 +205,17 @@ function CustomisationDialog({ group, menuItems, currentDishId, onCancel, onSave
         </header>
 
         {selectingOptions ? <>
-          <label className="customisation-search"><Icon name="search" /><span className="sr-only">Search menu items</span><input type="search" placeholder="Search menu items…" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
-          <div className="menu-item-selector">
-            {selectableItems.map((item) => <label key={item.id}>
-              <input type="checkbox" checked={selectedIds.includes(item.id)} onChange={() => setSelectedIds((current) => current.includes(item.id) ? current.filter((id) => id !== item.id) : [...current, item.id])} />
-              <img src={item.image} alt="" />
-              <span><strong>{item.name}</strong><small>{item.category} · {item.status}</small></span>
-              <b>{money.format(item.price)}</b>
-            </label>)}
-            {!selectableItems.length && <p className="customisation-empty">No menu items match your search.</p>}
+          <div className="customisation-selector">
+            <label className="customisation-search"><Icon name="search" /><span className="sr-only">Search menu items</span><input type="search" placeholder="Search menu items…" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
+            <div className="menu-item-selector">
+              {selectableItems.map((item) => <label key={item.id}>
+                <input type="checkbox" checked={selectedIds.includes(item.id)} onChange={() => setSelectedIds((current) => current.includes(item.id) ? current.filter((id) => id !== item.id) : [...current, item.id])} />
+                <img src={item.image} alt="" />
+                <span><strong>{item.name}</strong><small>{item.category} · {item.status}</small></span>
+                <b>{money.format(item.price)}</b>
+              </label>)}
+              {!selectableItems.length && <p className="customisation-empty">No menu items match your search.</p>}
+            </div>
           </div>
           <footer><button type="button" onClick={() => { setSelectingOptions(false); setSelectedIds(draft.options.map((option) => option.menuItemId)); setQuery(""); }}>Cancel</button><button className="primary" type="button" onClick={applySelectedItems}>Add selected items ({selectedIds.length})</button></footer>
         </> : <>
@@ -479,7 +481,7 @@ export function MenuManagement() {
 
         <div className="menu-list-toolbar">
           <strong>{filteredDishes.length} {filteredDishes.length === 1 ? "item" : "items"}</strong>
-          <div><label>Sort by:<select value={sort} onChange={(event) => setSort(event.target.value)}><option value="name">Name (A–Z)</option><option value="price-high">Price (high–low)</option><option value="price-low">Price (low–high)</option></select></label><span><button type="button" className={view === "list" ? "active" : ""} aria-label="List view" onClick={() => setView("list")}><Icon name="list" /></button><button type="button" className={view === "grid" ? "active" : ""} aria-label="Grid view" onClick={() => setView("grid")}><Icon name="grid" /></button></span></div>
+          <div><label>Sort by:<select value={sort} onChange={(event) => setSort(event.target.value)}><option value="name">Name (A–Z)</option><option value="price-high">Price (high–low)</option><option value="price-low">Price (low–high)</option></select></label><span className="menu-view-toggle"><button type="button" className={view === "list" ? "active" : ""} aria-label="List view" onClick={() => setView("list")}><Icon name="list" /></button><button type="button" className={view === "grid" ? "active" : ""} aria-label="Grid view" onClick={() => setView("grid")}><Icon name="grid" /></button></span></div>
         </div>
 
         <div className="menu-dish-list" data-view={view}>

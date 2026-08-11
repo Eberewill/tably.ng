@@ -36,7 +36,7 @@
   display: flex;
   width: min(30vw, 330px);
   min-width: 240px;
-  min-height: 44px;
+  min-height: 40px;
   align-items: center;
   gap: 10px;
   border-radius: var(--radius-sm);
@@ -86,7 +86,7 @@
 .orders-overview-actions button {
   display: inline-flex;
   min-width: 48px;
-  min-height: 44px;
+  min-height: 40px;
   align-items: center;
   justify-content: center;
   gap: 9px;
