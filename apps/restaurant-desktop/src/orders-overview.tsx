@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./orders-overview.css";
 
 type OrderStatus = "New" | "Preparing" | "Ready" | "Completed";
@@ -12,6 +12,7 @@ type OverviewOrder = {
   service: ServiceType;
   status: OrderStatus;
   items: Array<{ name: string; price: number; quantity?: number }>;
+  note?: string;
 };
 
 const columns: Array<{ status: OrderStatus; label: string }> = [
@@ -23,10 +24,10 @@ const columns: Array<{ status: OrderStatus; label: string }> = [
 
 const initialOrders: OverviewOrder[] = [
   { id: "1032", table: "07", guests: 2, placedAt: "2 mins ago", service: "Takeaway", status: "New", items: [{ name: "Truffle Mushroom Pasta", price: 18500 }, { name: "Lemonade", price: 3500 }] },
-  { id: "1031", table: "12", guests: 4, placedAt: "4 mins ago", service: "Dine in", status: "New", items: [{ name: "Grilled Salmon", price: 21000 }, { name: "Coke Zero", price: 5000, quantity: 2 }] },
+  { id: "1031", table: "12", guests: 4, placedAt: "4 mins ago", service: "Dine in", status: "New", items: [{ name: "Grilled Salmon", price: 21000 }, { name: "Coke Zero", price: 5000, quantity: 2 }], note: "One guest has a dairy allergy. Keep butter and cream away from this order." },
   { id: "1030", table: "03", guests: 3, placedAt: "6 mins ago", service: "Dine in", status: "New", items: [{ name: "Chicken Suya Bowl", price: 16000 }, { name: "Hibiscus Iced Tea", price: 3000 }] },
   { id: "1029", table: "09", guests: 2, placedAt: "8 mins ago", service: "Dine in", status: "New", items: [{ name: "Margherita Pizza", price: 14500 }, { name: "Sparkling Water", price: 2000 }] },
-  { id: "1028", table: "05", guests: 2, placedAt: "10 mins ago", service: "Dine in", status: "Preparing", items: [{ name: "Jollof Rice", price: 15000 }, { name: "Fried Plantain", price: 2500 }] },
+  { id: "1028", table: "05", guests: 2, placedAt: "10 mins ago", service: "Dine in", status: "Preparing", items: [{ name: "Jollof Rice", price: 15000 }, { name: "Fried Plantain", price: 2500 }], note: "Peanut allergy recorded. Use clean utensils and confirm the garnish." },
   { id: "1027", table: "11", guests: 3, placedAt: "11 mins ago", service: "Dine in", status: "Preparing", items: [{ name: "Pepper Steak", price: 22500 }, { name: "Mashed Potatoes", price: 3500 }] },
   { id: "1026", table: "02", guests: 2, placedAt: "14 mins ago", service: "Takeaway", status: "Preparing", items: [{ name: "Chicken Alfredo", price: 17000 }, { name: "Lemonade", price: 3500 }] },
   { id: "1025", table: "08", guests: 4, placedAt: "16 mins ago", service: "Takeaway", status: "Preparing", items: [{ name: "Seafood Risotto", price: 23000 }, { name: "Coke Zero", price: 2500 }] },
@@ -95,6 +96,16 @@ export function OrdersOverview() {
   const [compact, setCompact] = useState(false);
   const [draggedOrder, setDraggedOrder] = useState<string>();
   const [showAllCompleted, setShowAllCompleted] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState<string>();
+  const selectedOrder = orders.find((order) => order.id === selectedOrderId);
+
+  useEffect(() => {
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setSelectedOrderId(undefined);
+    }
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, []);
 
   const filteredOrders = orders.filter((order) => {
     const searchValue = `${order.id} ${order.table} ${order.items.map((item) => item.name).join(" ")}`.toLowerCase();
@@ -185,8 +196,17 @@ export function OrdersOverview() {
                     key={order.id}
                     className="overview-order-card"
                     draggable
+                    tabIndex={0}
+                    aria-label={`View order ${order.id} details`}
+                    onClick={() => setSelectedOrderId(order.id)}
                     onDragStart={() => setDraggedOrder(order.id)}
                     onDragEnd={() => setDraggedOrder(undefined)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        setSelectedOrderId(order.id);
+                      }
+                    }}
                   >
                     <header>
                       <strong>Order #{order.id}</strong>
@@ -235,6 +255,56 @@ export function OrdersOverview() {
           );
         })}
       </div>
+
+      {selectedOrder && (
+        <div
+          className="overview-order-overlay"
+          onClick={() => setSelectedOrderId(undefined)}
+        >
+          <section
+            className="overview-order-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="overview-order-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              className="overview-order-modal-close"
+              aria-label="Close order details"
+              onClick={() => setSelectedOrderId(undefined)}
+            >
+              ×
+            </button>
+            <span className="overview-order-modal-status">{selectedOrder.status}</span>
+            <h2 id="overview-order-title">Order #{selectedOrder.id}</h2>
+            <p>{selectedOrder.placedAt}</p>
+            <dl>
+              <div><dt>Table</dt><dd>{selectedOrder.table}</dd></div>
+              <div><dt>Guests</dt><dd>{selectedOrder.guests}</dd></div>
+              <div><dt>Service</dt><dd>{selectedOrder.service}</dd></div>
+            </dl>
+            <section>
+              <h3>Order details</h3>
+              <ul>
+                {selectedOrder.items.map((item) => (
+                  <li key={item.name}>
+                    <span>{item.quantity ?? 1} × {item.name}</span>
+                    <strong>{money.format(item.price)}</strong>
+                  </li>
+                ))}
+              </ul>
+              <div className="overview-order-modal-total">
+                <span>Total</span>
+                <strong>{money.format(orderTotal(selectedOrder))}</strong>
+              </div>
+            </section>
+            <section className="overview-order-note">
+              <h3>Dietary and service notes</h3>
+              <p>{selectedOrder.note ?? "No allergies or special requests recorded."}</p>
+            </section>
+          </section>
+        </div>
+      )}
 
       <footer className="orders-live-summary">
         <strong><i aria-hidden="true">⌁</i> Live summary</strong>

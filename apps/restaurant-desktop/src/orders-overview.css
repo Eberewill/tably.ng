@@ -1,6 +1,6 @@
 .orders-overview {
   display: grid;
-  min-height: calc(100vh - 88px);
+  min-height: calc(100vh - var(--desktop-nav-height));
   grid-template-rows: auto 1fr auto;
   background: var(--surface);
 }
@@ -10,7 +10,7 @@
   align-items: end;
   justify-content: space-between;
   gap: 32px;
-  padding: 36px clamp(28px, 4vw, 56px) 28px;
+  padding: 22px clamp(28px, 4vw, 56px) 18px;
 }
 
 .orders-overview-toolbar h1 {
@@ -109,7 +109,7 @@
   grid-template-columns: repeat(4, minmax(250px, 1fr));
   gap: 18px;
   overflow-x: auto;
-  padding: 12px clamp(28px, 4vw, 56px) 28px;
+  padding: 6px clamp(28px, 4vw, 56px) 24px;
 }
 
 .overview-order-column {
@@ -203,6 +203,11 @@
 
 .overview-order-card:hover {
   outline-color: var(--accent);
+}
+
+.overview-order-card:focus-visible {
+  outline-color: var(--gold);
+  outline-offset: 2px;
 }
 
 .overview-order-card:active {
@@ -309,6 +314,150 @@
 .orders-overview.compact .overview-order-card {
   gap: 7px;
   padding: 12px;
+}
+
+.overview-order-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  background: rgb(28 28 24 / 0.28);
+  padding: 24px;
+}
+
+.overview-order-modal {
+  position: relative;
+  width: min(100%, 520px);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  border: 0;
+  border-radius: var(--radius-modal);
+  background: var(--surface-primary);
+  padding: 34px;
+}
+
+.overview-order-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--ink);
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.overview-order-modal-status {
+  display: inline-block;
+  border-radius: var(--radius-xs);
+  background: var(--surface-container-high);
+  color: var(--accent-dark);
+  padding: 5px 7px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.overview-order-modal > h2 {
+  margin: 18px 0 4px;
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.overview-order-modal > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.overview-order-modal > dl {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 28px 0 0;
+  background: var(--surface-container-low);
+  border-radius: var(--radius-sm);
+}
+
+.overview-order-modal > dl div {
+  padding: 14px 16px;
+}
+
+.overview-order-modal dt,
+.overview-order-modal h3 {
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.overview-order-modal dd {
+  margin: 5px 0 0;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.overview-order-modal > section {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.overview-order-modal h3 {
+  margin: 0 0 14px;
+}
+
+.overview-order-modal ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.overview-order-modal li,
+.overview-order-modal-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.overview-order-modal li {
+  color: var(--ink-secondary);
+  font-size: 0.82rem;
+}
+
+.overview-order-modal li strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.overview-order-modal-total {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.overview-order-modal-total strong {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.overview-order-note p {
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: 0.82rem;
+  line-height: 1.55;
 }
 
 .orders-live-summary {
@@ -421,10 +570,6 @@
 }
 
 @media (max-width: 720px) {
-  .orders-overview {
-    min-height: calc(100vh - 72px);
-  }
-
   .orders-overview-toolbar {
     display: grid;
     gap: 20px;

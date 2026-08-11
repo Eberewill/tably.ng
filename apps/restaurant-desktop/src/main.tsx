@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { createRoot } from "react-dom/client";
 import { isTauri } from "@tauri-apps/api/core";
-import { getCurrentWindow } from "@tauri-apps/api/window";
-import { LiveOrderBoard } from "@tably/ui";
+import { AuthFlow, BrandMark } from "@tably/ui";
 import "@tably/ui/tokens.css";
 import { OrdersOverview } from "./orders-overview";
 import "./style.css";
-
-type DesktopPage = "orders" | "kitchen";
 
 type NavigationIcon =
   | "orders"
@@ -21,10 +18,9 @@ type NavigationIcon =
 const navigation: ReadonlyArray<{
   icon: NavigationIcon;
   label: string;
-  page?: DesktopPage;
 }> = [
-  { icon: "orders", label: "Orders", page: "orders" },
-  { icon: "kitchen", label: "Kitchen", page: "kitchen" },
+  { icon: "orders", label: "Orders" },
+  { icon: "kitchen", label: "Kitchen" },
   { icon: "menu", label: "Menu" },
   { icon: "history", label: "Order history" },
   { icon: "analytics", label: "Analytics" },
@@ -89,82 +85,41 @@ function NavigationIcon({ name }: { name: NavigationIcon }) {
   );
 }
 
-function WindowControls() {
-  const runWindowAction = (
-    action: (appWindow: ReturnType<typeof getCurrentWindow>) => Promise<void>,
-  ) => {
-    if (isTauri()) void action(getCurrentWindow());
-  };
-
-  return (
-    <div className="window-controls" aria-label="Window controls">
-      <button
-        className="window-close"
-        aria-label="Close window"
-        onClick={() => runWindowAction((appWindow) => appWindow.close())}
-      />
-      <button
-        className="window-minimize"
-        aria-label="Minimize window"
-        onClick={() => runWindowAction((appWindow) => appWindow.minimize())}
-      />
-      <button
-        className="window-maximize"
-        aria-label="Maximize window"
-        onClick={() =>
-          runWindowAction((appWindow) => appWindow.toggleMaximize())
-        }
-      />
-    </div>
-  );
-}
-
-function App() {
-  const [activePage, setActivePage] = useState<DesktopPage>("orders");
-
+function RestaurantApp() {
   return (
     <main className="desktop-order-board">
-      <header
-        className="desktop-navigation"
-        data-tauri-drag-region=""
-        onDoubleClick={(event) => {
-          if (event.target === event.currentTarget) {
-            if (isTauri()) void getCurrentWindow().toggleMaximize();
-          }
-        }}
-      >
-        <WindowControls />
+      <header className="desktop-navigation">
+        <BrandMark />
         <nav aria-label="Restaurant navigation">
-          {navigation.map(({ icon, label, page }) => (
+          {navigation.map(({ icon, label }) => (
             <button
               key={label}
-              className={page === activePage ? "active" : ""}
-              aria-current={page === activePage ? "page" : undefined}
+              className={icon === "orders" ? "active" : ""}
+              aria-current={icon === "orders" ? "page" : undefined}
               aria-label={label}
               title={label}
-              onClick={() => page && setActivePage(page)}
             >
               <NavigationIcon name={icon} />
             </button>
           ))}
         </nav>
-        <span className="navigation-spacer" aria-hidden="true" />
+        <span className="desktop-navigation-spacer" aria-hidden="true" />
       </header>
-      {activePage === "orders" ? (
-        <OrdersOverview />
-      ) : (
-        <section className="desktop-board-content">
-          <header className="desktop-board-heading">
-            <div>
-              <p>Kitchen display</p>
-              <h1>Live order feed</h1>
-            </div>
-            <span>Zuma Grill · Maitama branch</span>
-          </header>
-          <LiveOrderBoard />
-        </section>
-      )}
+      <OrdersOverview />
     </main>
+  );
+}
+
+function App() {
+  const [authenticated, setAuthenticated] = useState(false);
+
+  return authenticated ? (
+    <RestaurantApp />
+  ) : (
+    <AuthFlow
+      nativeRuntime={isTauri()}
+      onAuthenticated={() => setAuthenticated(true)}
+    />
   );
 }
 

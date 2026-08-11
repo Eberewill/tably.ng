@@ -22,9 +22,9 @@ pnpm install
 pnpm dev
 ```
 
-Customer web runs on port 3000 and restaurant web on port 3001. Install the Rust toolchain and platform prerequisites before running `pnpm --filter @tably/restaurant-desktop tauri dev`.
+This starts customer web on port 3000, restaurant web on port 3001, and the native restaurant desktop app. Tauri starts its own Vite frontend on port 1420. Install the Rust toolchain and platform prerequisites before running the workspace development command.
 
-Run the API separately with `cd apps/api && go run ./cmd/api`. All clients use this one authoritative backend; the desktop runtime only owns local hardware and offline capabilities.
+Run the API in a second terminal with `pnpm dev:api`. All clients use this one authoritative backend; the desktop runtime only owns local hardware and offline capabilities. For focused development, use `pnpm dev:desktop` for the native app or `pnpm dev:desktop:web` for its browser-only preview.
 
 ## Product boundaries
 

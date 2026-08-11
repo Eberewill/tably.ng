@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { createRoot } from "react-dom/client";
-import { BrandMark, LiveOrderBoard } from "@tably/ui";
+import { AuthFlow, BrandMark, LiveOrderBoard } from "@tably/ui";
 import "@tably/ui/tokens.css";
 import "./style.css";
 
@@ -11,7 +12,7 @@ const navigation = [
   "Analytics",
 ];
 
-function App() {
+function RestaurantApp() {
   return (
     <div className="restaurant-shell">
       <aside className="restaurant-sidebar">
@@ -53,6 +54,16 @@ function App() {
         </main>
       </section>
     </div>
+  );
+}
+
+function App() {
+  const [authenticated, setAuthenticated] = useState(false);
+
+  return authenticated ? (
+    <RestaurantApp />
+  ) : (
+    <AuthFlow onAuthenticated={() => setAuthenticated(true)} />
   );
 }
 
