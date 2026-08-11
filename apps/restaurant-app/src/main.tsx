@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { isTauri } from "@tauri-apps/api/core";
 import { AuthFlow, BrandMark } from "@tably/ui";
 import "@tably/ui/tokens.css";
+import { AnalyticsDashboard } from "./analytics/analytics-dashboard";
 import { OrdersOverview } from "./orders-overview";
 import "./style.css";
+
+type AppPage = "orders" | "analytics";
 
 type NavigationIcon =
   | "orders"
@@ -18,12 +21,13 @@ type NavigationIcon =
 const navigation: ReadonlyArray<{
   icon: NavigationIcon;
   label: string;
+  page?: AppPage;
 }> = [
-  { icon: "orders", label: "Orders" },
+  { icon: "orders", label: "Orders", page: "orders" },
   { icon: "kitchen", label: "Kitchen" },
   { icon: "menu", label: "Menu" },
   { icon: "history", label: "Order history" },
-  { icon: "analytics", label: "Analytics" },
+  { icon: "analytics", label: "Analytics", page: "analytics" },
   { icon: "team", label: "Team" },
   { icon: "settings", label: "Settings" },
 ];
@@ -85,28 +89,75 @@ function NavigationIcon({ name }: { name: NavigationIcon }) {
   );
 }
 
-function RestaurantApp() {
+function UserMenu({ onSignOut }: { onSignOut: () => void }) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    window.addEventListener("pointerdown", close);
+    return () => window.removeEventListener("pointerdown", close);
+  }, [open]);
+
   return (
-    <main className="desktop-order-board">
+    <div className="desktop-user-menu" ref={menuRef}>
+      <button
+        className="desktop-user-trigger"
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+      >
+        <span className="desktop-user-avatar" aria-hidden="true">AY</span>
+        <span className="desktop-user-copy">
+          <strong>Amina Yusuf</strong>
+          <small>Zuma Grill · Manager</small>
+        </span>
+        <span className="desktop-user-chevron" aria-hidden="true">⌄</span>
+      </button>
+      {open && (
+        <div className="desktop-user-dropdown" role="menu">
+          <header>
+            <strong>Amina Yusuf</strong>
+            <span>amina@zumagrill.ng</span>
+          </header>
+          <button type="button" role="menuitem">Account settings</button>
+          <button type="button" role="menuitem">Switch restaurant</button>
+          <button type="button" role="menuitem" onClick={onSignOut}>Sign out</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RestaurantApp({ onSignOut }: { onSignOut: () => void }) {
+  const [activePage, setActivePage] = useState<AppPage>("orders");
+
+  return (
+    <div className="desktop-order-board">
       <header className="desktop-navigation">
         <BrandMark />
         <nav aria-label="Restaurant navigation">
-          {navigation.map(({ icon, label }) => (
+          {navigation.map(({ icon, label, page }) => (
             <button
               key={label}
-              className={icon === "orders" ? "active" : ""}
-              aria-current={icon === "orders" ? "page" : undefined}
+              className={page === activePage ? "active" : ""}
+              aria-current={page === activePage ? "page" : undefined}
               aria-label={label}
               title={label}
+              onClick={() => page && setActivePage(page)}
             >
               <NavigationIcon name={icon} />
             </button>
           ))}
         </nav>
-        <span className="desktop-navigation-spacer" aria-hidden="true" />
+        <UserMenu onSignOut={onSignOut} />
       </header>
-      <OrdersOverview />
-    </main>
+      {activePage === "analytics" ? <AnalyticsDashboard /> : <OrdersOverview />}
+    </div>
   );
 }
 
@@ -114,7 +165,7 @@ function App() {
   const [authenticated, setAuthenticated] = useState(false);
 
   return authenticated ? (
-    <RestaurantApp />
+    <RestaurantApp onSignOut={() => setAuthenticated(false)} />
   ) : (
     <AuthFlow
       nativeRuntime={isTauri()}
