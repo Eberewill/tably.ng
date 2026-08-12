@@ -36,13 +36,18 @@
   display: flex;
   width: min(30vw, 330px);
   min-width: 240px;
-  min-height: 44px;
+  min-height: 40px;
   align-items: center;
   gap: 10px;
   border-radius: var(--radius-sm);
   background: var(--surface-primary);
   padding: 0 14px;
   outline: 1px solid var(--line);
+  transition: outline-color 160ms ease;
+}
+
+.orders-search:hover {
+  outline-color: var(--line-strong);
 }
 
 .orders-search:focus-within {
@@ -81,7 +86,7 @@
 .orders-overview-actions button {
   display: inline-flex;
   min-width: 48px;
-  min-height: 44px;
+  min-height: 40px;
   align-items: center;
   justify-content: center;
   gap: 9px;
@@ -91,6 +96,7 @@
   color: var(--ink-secondary);
   padding: 0 16px;
   outline: 1px solid var(--line);
+  transition: color 160ms ease, outline-color 160ms ease, background-color 160ms ease;
   cursor: pointer;
 }
 
@@ -478,19 +484,29 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 600;
 }
 
 .orders-live-summary > strong i {
   display: grid;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   place-items: center;
   border-radius: 50%;
-  background: var(--ink);
-  color: var(--surface);
+  background: var(--accent-dark);
+  color: white;
   font-style: normal;
+}
+
+.orders-live-summary > strong svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 
 .orders-live-summary dl {
@@ -514,11 +530,6 @@
   font-size: 0.9rem;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-}
-
-.orders-live-summary dl > div:last-child dd {
-  font-size: 1.05rem;
-  font-weight: 600;
 }
 
 .orders-auto-refresh {

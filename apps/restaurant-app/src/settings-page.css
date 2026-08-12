@@ -1,0 +1,235 @@
+.settings-page {
+  min-height: calc(100vh - var(--desktop-nav-height));
+  background: var(--surface);
+  padding: 24px clamp(28px, 3.6vw, 56px) 40px;
+}
+
+.settings-heading,
+.settings-workspace,
+.settings-section-heading,
+.profile-form,
+.restaurant-logo-field > div,
+.settings-switch-row,
+.settings-value-row,
+.settings-subtabs,
+.settings-table > header,
+.settings-table > article,
+.integration-list article,
+.security-list article,
+.settings-action-row {
+  display: flex;
+  align-items: center;
+}
+
+.settings-heading { justify-content: space-between; gap: 28px; }
+.settings-heading h1 { margin: 0; font-size: 1.75rem; font-weight: 500; letter-spacing: -.035em; }
+.settings-heading p { margin: 5px 0 0; color: var(--muted); font-size: .72rem; }
+.settings-heading > label {
+  display: flex;
+  width: min(360px, 32vw);
+  min-height: 40px;
+  align-items: center;
+  gap: 9px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-primary);
+  padding: 0 14px;
+  outline: 1px solid var(--line);
+}
+.settings-heading > label:hover { outline-color: var(--line-strong); }
+.settings-heading > label:focus-within { outline-color: var(--gold); }
+.settings-heading input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: .76rem; }
+.settings-page svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.6; }
+.settings-notice { min-height: 18px; margin: 10px 0 -4px; color: #24763d; font-size: .64rem; }
+
+.settings-workspace { align-items: flex-start; gap: 14px; margin-top: 14px; }
+.settings-sidebar {
+  display: grid;
+  width: 260px;
+  flex: 0 0 260px;
+  gap: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-primary);
+  padding: 10px;
+  outline: 1px solid var(--line);
+}
+.settings-sidebar > button {
+  display: grid;
+  min-height: 54px;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-secondary);
+  padding: 8px 9px;
+  text-align: left;
+  cursor: pointer;
+}
+.settings-sidebar > button:hover { background: var(--surface-container-low); }
+.settings-sidebar > button.active { background: var(--surface-neutral); color: var(--accent-dark); }
+.settings-sidebar > button > i { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: var(--surface-container-low); font-style: normal; }
+.settings-sidebar > button > span { display: grid; min-width: 0; gap: 2px; }
+.settings-sidebar strong { color: var(--ink); font-size: .68rem; font-weight: 500; }
+.settings-sidebar small { overflow: hidden; color: var(--muted); font-size: .6rem; text-overflow: ellipsis; white-space: nowrap; }
+.settings-sidebar b { color: var(--muted); font-weight: 400; }
+.settings-sidebar > p { padding: 24px 10px; color: var(--muted); font-size: .62rem; text-align: center; }
+
+.settings-content { display: grid; min-width: 0; flex: 1; gap: 10px; }
+.settings-panel { min-width: 0; border-radius: var(--radius-sm); background: var(--surface-primary); padding: 16px 18px; outline: 1px solid var(--line); }
+.settings-section-heading { justify-content: space-between; gap: 20px; }
+.settings-section-heading h2 { margin: 0; font-size: 1rem; font-weight: 500; }
+.settings-section-heading p { margin: 3px 0 0; color: var(--muted); font-size: .65rem; }
+.settings-section-heading > button,
+.restaurant-logo-field button,
+.settings-action-row button,
+.security-list button,
+.integration-list button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface-primary);
+  color: var(--ink-secondary);
+  padding: 0 11px;
+  outline: 1px solid var(--line);
+  font-size: .65rem;
+  cursor: pointer;
+}
+.settings-section-heading > button:hover,
+.settings-action-row button:hover { color: var(--accent-dark); outline-color: var(--accent); }
+.settings-page button:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+
+.profile-form { align-items: flex-start; gap: 24px; margin-top: 16px; }
+.restaurant-logo-field { display: grid; width: 220px; flex: 0 0 220px; justify-items: center; gap: 10px; }
+.restaurant-logo-field > span { justify-self: start; color: var(--ink-secondary); font-size: .65rem; font-weight: 500; }
+.restaurant-logo-field > i { display: grid; width: 76px; height: 76px; place-items: center; border-radius: 50%; background: var(--surface-neutral); color: var(--accent-dark); font-size: 1.2rem; font-style: normal; font-weight: 500; }
+.restaurant-logo-field > div { gap: 8px; }
+.restaurant-logo-field button.danger { color: var(--error); }
+
+.settings-field-grid,
+.regional-grid,
+.settings-switch-grid { display: grid; flex: 1; gap: 13px 18px; }
+.settings-field-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.settings-field-grid label,
+.regional-grid label { display: grid; gap: 5px; color: var(--ink-secondary); font-size: .62rem; }
+.settings-field-grid input,
+.settings-field-grid select,
+.regional-grid select,
+.settings-value-row input {
+  width: 100%;
+  min-height: 38px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface-container-low);
+  color: var(--ink);
+  padding: 0 11px;
+  outline: 0;
+  font: inherit;
+}
+.settings-field-grid input:focus,
+.settings-field-grid select:focus,
+.regional-grid select:focus,
+.settings-value-row input:focus { background: var(--surface-primary); outline: 1px solid var(--gold); }
+.settings-field-grid input:disabled,
+.settings-field-grid select:disabled { opacity: 1; color: var(--ink-secondary); }
+
+.business-hours { display: grid; grid-template-columns: repeat(7, minmax(92px, 1fr)); gap: 8px; margin-top: 14px; overflow-x: auto; }
+.business-hours button { display: grid; min-height: 66px; align-content: center; gap: 3px; border: 0; border-radius: var(--radius-sm); background: var(--surface-container-low); color: var(--ink-secondary); padding: 9px 11px; text-align: left; }
+.business-hours button:disabled { opacity: 1; }
+.business-hours button:not(:disabled) { cursor: pointer; }
+.business-hours strong { color: var(--ink); font-size: .66rem; font-weight: 500; }
+.business-hours span { font-size: .6rem; white-space: nowrap; }
+.business-hours em { color: var(--error); font-size: .6rem; font-style: normal; }
+.business-hours button.closed { background: #fbefeb; outline: 1px solid #e7a38e; }
+.regional-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 14px; }
+.settings-switch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 14px; gap: 0 16px; }
+
+.settings-switch-row,
+.settings-value-row,
+.settings-action-row { min-height: 52px; justify-content: space-between; gap: 18px; border-bottom: 1px solid var(--line); padding: 8px 12px; }
+.settings-switch-row > span,
+.settings-value-row > span,
+.settings-action-row > span { display: grid; gap: 2px; }
+.settings-switch-row strong,
+.settings-value-row strong,
+.settings-action-row strong { color: var(--ink); font-size: .66rem; font-weight: 500; }
+.settings-switch-row small,
+.settings-value-row small,
+.settings-action-row small { color: var(--muted); font-size: .6rem; }
+.settings-switch-row input { position: relative; width: 34px; height: 18px; flex: 0 0 34px; appearance: none; border-radius: 999px; background: var(--surface-dim); cursor: pointer; }
+.settings-switch-row input::after { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: white; content: ""; transition: transform 150ms ease; }
+.settings-switch-row input:checked { background: var(--accent); }
+.settings-switch-row input:checked::after { transform: translateX(16px); }
+.settings-switch-row input:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+.settings-value-row input { width: 90px; flex: 0 0 90px; }
+
+.business-fields { margin-top: 18px; }
+.settings-subtabs { gap: 16px; margin-top: 15px; border-bottom: 1px solid var(--line); }
+.settings-subtabs button { min-height: 38px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--ink-secondary); padding: 0 10px; font-size: .66rem; cursor: pointer; }
+.settings-subtabs button.active { border-bottom-color: var(--accent); color: var(--accent-dark); }
+.settings-list { margin-top: 10px; }
+
+.settings-table { margin-top: 12px; overflow-x: auto; border-radius: var(--radius-sm); outline: 1px solid var(--line); }
+.settings-table > header,
+.settings-table > article { display: grid; min-width: 660px; align-items: center; gap: 14px; padding: 0 14px; }
+.settings-table > header { min-height: 36px; background: var(--surface-container-low); color: var(--muted); font-size: .6rem; text-transform: uppercase; }
+.settings-table > article { min-height: 48px; border-top: 1px solid var(--line); color: var(--ink-secondary); font-size: .66rem; }
+.settings-table strong { color: var(--ink); font-weight: 500; }
+.settings-table button { display: grid; width: 30px; height: 30px; place-items: center; border: 0; background: transparent; color: var(--ink-secondary); cursor: pointer; }
+.payment-table > header, .payment-table > article { grid-template-columns: 1.2fr .7fr .8fr 60px; }
+.device-table > header, .device-table > article { grid-template-columns: 1.2fr 1fr .8fr .7fr 60px; }
+.menu-settings-table > header, .menu-settings-table > article { grid-template-columns: 1.4fr .8fr .8fr 60px; }
+.settings-status { width: max-content; border-radius: var(--radius-xs); background: var(--surface-container-low); padding: 3px 7px; font-size: .58rem; }
+.settings-status.active, .settings-status.online { background: #e7f4e9; color: #24763d; }
+.settings-status.offline { background: #f8e7e2; color: var(--error); }
+
+.integration-list,
+.security-list { display: grid; margin-top: 14px; }
+.integration-list article,
+.security-list article { min-height: 58px; gap: 12px; border-bottom: 1px solid var(--line); padding: 8px 4px; }
+.integration-list article > i,
+.security-list article > i { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border-radius: 50%; background: var(--surface-container-low); color: var(--accent-dark); font-style: normal; }
+.integration-list article > span,
+.security-list article > span { display: grid; min-width: 0; flex: 1; gap: 2px; }
+.integration-list strong,
+.security-list strong { font-size: .66rem; font-weight: 500; }
+.integration-list small,
+.security-list small { color: var(--muted); font-size: .6rem; }
+.integration-list b { min-width: 120px; font-size: .62rem; font-weight: 500; }
+.integration-list em { border-radius: var(--radius-xs); background: var(--surface-container-low); padding: 3px 7px; color: var(--muted); font-size: .58rem; font-style: normal; }
+.integration-list em.connected { background: #e7f4e9; color: #24763d; }
+.security-list button { margin-left: auto; }
+
+@media (max-width: 980px) {
+  .settings-heading { align-items: flex-start; flex-direction: column; }
+  .settings-heading > label { width: 100%; }
+  .settings-workspace { flex-direction: column; }
+  .settings-sidebar { display: grid; width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .settings-sidebar > button { background: var(--surface-container-low); }
+  .settings-content { width: 100%; }
+  .regional-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 650px) {
+  .settings-page { padding: 18px 16px 28px; }
+  .settings-heading h1 { font-size: 1.45rem; }
+  .settings-sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); outline: 0; padding: 0; }
+  .settings-sidebar > button { grid-template-columns: 30px minmax(0, 1fr); }
+  .settings-sidebar b { display: none; }
+  .settings-panel { padding: 14px; }
+  .profile-form { align-items: stretch; flex-direction: column; }
+  .restaurant-logo-field { width: 100%; }
+  .restaurant-logo-field > span { justify-self: center; }
+  .settings-field-grid,
+  .regional-grid,
+  .settings-switch-grid { grid-template-columns: 1fr; }
+  .business-hours { grid-template-columns: repeat(7, 120px); }
+  .settings-section-heading { align-items: flex-start; }
+  .integration-list article { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; }
+  .integration-list b { display: none; }
+  .integration-list em { grid-column: 2; width: max-content; }
+  .integration-list button { grid-row: 1 / span 2; grid-column: 3; }
+}

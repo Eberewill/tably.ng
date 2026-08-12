@@ -4,12 +4,26 @@
   background: var(--surface);
 }
 
+.app-pagination-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  min-height: 76px;
+  margin-top: auto;
+  margin-right: calc(var(--page-gutter) * -1);
+  margin-bottom: calc(var(--page-bottom-space) * -1);
+  margin-left: calc(var(--page-gutter) * -1);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  padding: 12px var(--page-gutter);
+}
+
 .desktop-navigation {
   position: sticky;
   top: 0;
   z-index: 4;
   display: grid;
-  grid-template-columns: 140px minmax(0, 1fr) 140px;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   min-height: var(--desktop-nav-height);
   align-items: center;
   justify-content: center;
@@ -24,10 +38,6 @@
   font-size: 1.45rem;
 }
 
-.desktop-navigation-spacer {
-  width: 100%;
-}
-
 .desktop-navigation nav {
   display: flex;
   min-width: 0;
@@ -37,6 +47,122 @@
   justify-content: center;
   gap: clamp(14px, 2.2vw, 32px);
 }
+
+.desktop-user-menu {
+  position: relative;
+  justify-self: end;
+}
+
+.desktop-user-trigger {
+  display: flex;
+  min-width: 230px;
+  min-height: 42px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface-primary);
+  color: var(--ink);
+  padding: 5px 10px 5px 6px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.desktop-user-trigger:hover,
+.desktop-user-trigger[aria-expanded="true"] { border-color: var(--accent); }
+.desktop-user-trigger:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.desktop-user-avatar {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  flex: 0 0 31px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-neutral);
+  color: var(--accent-dark);
+  font-size: .68rem;
+  font-weight: 600;
+}
+
+.desktop-user-copy { display: grid; min-width: 0; flex: 1; line-height: 1.25; }
+.desktop-user-copy strong { overflow: hidden; font-size: .72rem; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.desktop-user-chevron { color: var(--muted); font-size: .9rem; }
+
+.desktop-user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  display: grid;
+  width: 320px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface-primary);
+}
+
+.desktop-user-profile {
+  display: grid;
+  width: 100%;
+  min-height: 84px;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  padding: 16px 18px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.desktop-user-profile > .desktop-user-avatar { width: 46px; height: 46px; flex-basis: 46px; font-size: .78rem; }
+.desktop-user-profile > span:nth-child(2) { display: grid; gap: 3px; }
+.desktop-user-profile strong { font-size: .86rem; font-weight: 500; }
+.desktop-user-profile small { color: var(--muted); font-size: .68rem; }
+.desktop-user-profile b { color: var(--muted); font-size: 1.35rem; font-weight: 400; }
+
+.desktop-user-links { display: grid; padding: 9px 0; }
+.desktop-user-links button,
+.desktop-user-logout {
+  display: flex;
+  width: 100%;
+  min-height: 46px;
+  align-items: center;
+  gap: 13px;
+  border: 0;
+  background: transparent;
+  color: var(--ink-secondary);
+  padding: 0 20px;
+  font: inherit;
+  font-size: .76rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.desktop-user-menu svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.desktop-user-profile:hover,
+.desktop-user-links button:hover,
+.desktop-user-logout:hover,
+.desktop-user-dropdown button:focus-visible {
+  background: var(--surface-container-low);
+  color: var(--accent-dark);
+  outline: 0;
+}
+
+.desktop-user-logout { min-height: 56px; border-top: 1px solid var(--line); color: var(--ink); }
 
 .desktop-navigation nav button {
   position: relative;
@@ -100,7 +226,7 @@
   }
 
   .desktop-navigation > .tably-brand,
-  .desktop-navigation-spacer {
+  .desktop-user-menu {
     display: none;
   }
 
