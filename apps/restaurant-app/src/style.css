@@ -4,6 +4,20 @@
   background: var(--surface);
 }
 
+.app-pagination-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  min-height: 76px;
+  margin-top: auto;
+  margin-right: calc(var(--page-gutter) * -1);
+  margin-bottom: calc(var(--page-bottom-space) * -1);
+  margin-left: calc(var(--page-gutter) * -1);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  padding: 12px var(--page-gutter);
+}
+
 .desktop-navigation {
   position: sticky;
   top: 0;

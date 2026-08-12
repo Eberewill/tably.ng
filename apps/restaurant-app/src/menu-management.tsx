@@ -501,7 +501,7 @@ export function MenuManagement() {
           {filteredDishes.length === 0 && <div className="menu-empty"><strong>No dishes found</strong><p>Try another search, category or status filter.</p><button type="button" onClick={() => { setQuery(""); setCategory("All Items"); setStatus("All"); }}>Clear filters</button></div>}
         </div>
         <p className="menu-save-message" aria-live="polite">{message}</p>
-        {filteredDishes.length > 0 && <nav className="menu-pagination" aria-label="Menu pagination">
+        {filteredDishes.length > 0 && <nav className="menu-pagination app-pagination-footer" aria-label="Menu pagination">
           <span className="menu-pagination-summary">Showing {pageStart + 1} to {Math.min(pageStart + pageSize, filteredDishes.length)} of {filteredDishes.length} items</span>
           <div className="menu-pagination-pages">
             <button type="button" aria-label="Previous page" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>‹</button>

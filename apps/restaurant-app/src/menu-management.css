@@ -9,14 +9,17 @@
 }
 
 .menu-management-list {
+  --page-gutter: clamp(28px, 3.6vw, 56px);
+  --page-bottom-space: 32px;
   display: flex;
   min-width: 0;
   min-height: calc(100vh - var(--desktop-nav-height));
   flex-direction: column;
-  padding: 24px clamp(28px, 3.6vw, 56px) 32px;
+  padding: 24px var(--page-gutter) var(--page-bottom-space);
 }
 
 .menu-management.editing .menu-management-list {
+  --page-gutter: 30px;
   border-right: 1px solid var(--line);
   padding-inline: 30px;
 }
@@ -549,19 +552,12 @@
 }
 
 .menu-pagination {
-  position: sticky;
-  z-index: 3;
-  bottom: 0;
   display: grid;
-  min-height: 58px;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 18px;
-  border-top: 1px solid var(--line);
-  background: var(--surface-primary);
   color: var(--muted);
   font-size: 0.68rem;
-  margin-top: auto;
 }
 
 .menu-pagination-pages {
@@ -1566,6 +1562,7 @@
 
 @media (max-width: 850px) {
   .menu-management-list {
+    --page-gutter: 20px;
     padding-inline: 20px;
   }
 
@@ -1623,7 +1620,9 @@
 
 @media (max-width: 600px) {
   .menu-management-list {
-    padding: 18px 16px 28px;
+    --page-gutter: 16px;
+    --page-bottom-space: 28px;
+    padding: 18px var(--page-gutter) var(--page-bottom-space);
   }
 
   .menu-management-heading h1 {
